@@ -270,6 +270,51 @@ class NewsView extends WatchUi.View {
         }
     }
 
+    // ---------- Portada: NOTICIAS DEL DÍA ----------
+
+    private function dibujarPortada(dc as Dc, cx as Number, cy as Number) as Void {
+        Ui.brillo(dc, Ui.s(85), Ui.s(70), Ui.s(180), Ui.BRILLO_MORADO);
+        Ui.brillo(dc, Ui.s(320), Ui.s(330), Ui.s(150), Ui.BRILLO_LIMA);
+        Ui.anillo(dc, cx, cy, 0, Ui.LIMA);
+        Ui.marcaStart(dc, cx, cy);
+
+        // Cápsula superior: estado + fecha del resumen
+        var fecha = Ui.fechaCorta(_fecha);
+        var esHoy = _fecha.equals(Ui.hoyIso());
+        var colorPunto = Ui.LIMA;
+        var texto = esHoy ? "HOY · " + fecha : fecha;
+        if (_cargando) {
+            colorPunto = Ui.MORADO;
+            texto = "ACTUALIZANDO";
+        } else if (_codigoError != null) {
+            colorPunto = Ui.NARANJA;
+            texto = "GUARDADAS · " + fecha;
+        }
+        Ui.capsulaSimple(dc, cx, Ui.s(64), :punto, colorPunto, texto, Ui.BLANCO, Ui.fEtiqueta);
+
+        Ui.titulo(dc, cx, Ui.s(140), "NOTICIAS", Ui.BLANCO);
+        Ui.titulo(dc, cx, Ui.s(196), "DEL DÍA", Ui.LIMA);
+
+        // Selector 1 · 2 · 3 (la actual con anillo lima; las leídas con número lima)
+        var total = _noticias.size();
+        var separacion = Ui.s(56);
+        var x0 = cx - (total - 1) * separacion / 2;
+        for (var i = 0; i < total; i++) {
+            var x = x0 + i * separacion;
+            var y = Ui.s(256);
+            var actual = (i == _indice);
+            var leida = (_leidas & (1 << i)) != 0;
+            dc.setColor(actual ? Ui.LIMA : 0x333333, Graphics.COLOR_TRANSPARENT);
+            dc.setPenWidth(Ui.s(3));
+            dc.drawCircle(x, y, Ui.s(21));
+            dc.setPenWidth(1);
+            var color = actual ? Ui.BLANCO : (leida ? Ui.LIMA : Ui.GRIS);
+            Ui.textoCentrado(dc, x, y, Ui.fNumero, (i + 1).toString(), color);
+        }
+
+        Ui.botonAccion(dc, cx, Ui.s(318), "LEER RESUMEN", :flecha);
+    }
+
 
     // Elige la fuente más grande con la que el titular completo cabe en el área.
     private function ajustar(areaW as Number, areaH as Number) as Void {
