@@ -1,3 +1,22 @@
 <strings>
     <string id="AppName">Noticias del Dia</string>
+
+    <!-- Ajustes (se muestran en el teléfono) -->
+    <string id="TituloTema">Tema de las noticias</string>
+    <string id="TemaMundo">Mundo</string>
+    <string id="TemaTecnologia">Tecnología</string>
+    <string id="TemaDeportes">Deportes</string>
+    <string id="TemaEconomia">Economía</string>
+    <string id="TemaCiencia">Ciencia</string>
+    <string id="TemaSalud">Salud</string>
+    <string id="TemaCultura">Cultura</string>
+
+    <string id="TituloAviso">Aviso diario en el reloj</string>
+    <string id="TituloHora">Hora del aviso (0-23)</string>
+    <string id="PromptHora">Ejemplo: 7 = 7:00 a. m.</string>
+    <string id="TituloMinuto">Minuto del aviso</string>
+    <string id="Min00">:00</string>
+    <string id="Min15">:15</string>
+    <string id="Min30">:30</string>
+    <string id="Min45">:45</string>
 </strings>
