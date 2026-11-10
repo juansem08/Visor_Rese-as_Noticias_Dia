@@ -14,9 +14,11 @@ const BACKEND_URL = "https://visordenoticias.vercel.app/api/news";
 (:background)
 module Config {
 
-    // Mismo orden que la lista de settings.xml y que TEMAS en lib/news.ts
+    // Mismo orden que settings.xml y que TEMAS en lib/news.ts
     const TEMAS = ["mundo", "tecnologia", "deportes", "economia", "ciencia", "salud", "cultura"] as Array<String>;
     const NOMBRES = ["MUNDO", "TECNOLOGÍA", "DEPORTES", "ECONOMÍA", "CIENCIA", "SALUD", "CULTURA"] as Array<String>;
+    const PROPIEDADES_TEMA = ["TemaMundo", "TemaTecnologia", "TemaDeportes", "TemaEconomia",
+                              "TemaCiencia", "TemaSalud", "TemaCultura"] as Array<String>;
 
     // ---------- Ajustes del teléfono ----------
 
@@ -28,13 +30,31 @@ module Config {
         return porDefecto;
     }
 
-    function temaActual() as String {
-        return TEMAS[leerNumero("Tema", 0, 0, TEMAS.size() - 1)];
+    function leerBooleano(clave as String, porDefecto as Boolean) as Boolean {
+        var valor = Application.Properties.getValue(clave);
+        if (valor instanceof Boolean) {
+            return valor;
+        }
+        return porDefecto;
     }
 
+    // Temas marcados en el teléfono, en orden: "mundo" o "mundo,deportes,salud".
+    // Es también la clave con la que el backend responde (campo "tema").
+    function temaActual() as String {
+        var texto = "";
+        for (var i = 0; i < TEMAS.size(); i++) {
+            if (leerBooleano(PROPIEDADES_TEMA[i], i == 0)) {
+                texto = (texto.length() == 0) ? TEMAS[i] : texto + "," + TEMAS[i];
+            }
+        }
+        return (texto.length() == 0) ? TEMAS[0] : texto;
+    }
+
+    // Etiqueta de respaldo: el primer tema de la lista.
     function nombreTema(tema as String) as String {
         for (var i = 0; i < TEMAS.size(); i++) {
-            if (TEMAS[i].equals(tema)) {
+            var largo = TEMAS[i].length();
+            if (tema.length() >= largo && (tema.substring(0, largo) as String).equals(TEMAS[i])) {
                 return NOMBRES[i];
             }
         }
@@ -42,11 +62,20 @@ module Config {
     }
 
     function avisoActivo() as Boolean {
-        var valor = Application.Properties.getValue("AvisoActivo");
-        if (valor instanceof Boolean) {
-            return valor;
-        }
-        return true;
+        return leerBooleano("AvisoActivo", true);
+    }
+
+    // 0 = grande, 1 = mediano, 2 = pequeño
+    function tamanoTexto() as Number {
+        return leerNumero("TamanoTexto", 0, 0, 2);
+    }
+
+    function vibrar() as Boolean {
+        return leerBooleano("Vibrar", true);
+    }
+
+    function abrirDirecto() as Boolean {
+        return leerBooleano("AbrirDirecto", false);
     }
 
     function horaAviso() as Number {
