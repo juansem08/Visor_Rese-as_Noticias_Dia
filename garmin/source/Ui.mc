@@ -132,4 +132,15 @@ module Ui {
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, y, fuente, texto, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
+    // ---------- Componentes ----------
+
+    // Etiqueta de categoría: píldora lima con texto negro.
+    function pildora(dc as Dc, cx as Number, cy as Number, texto as String) as Void {
+        var fuente = fEtiqueta;
+        var alto = dc.getFontHeight(fuente) + s(10);
+        var ancho = dc.getTextWidthInPixels(texto, fuente) + alto;
+        dc.setColor(LIMA, Graphics.COLOR_TRANSPARENT);
+        dc.fillRoundedRectangle(cx - ancho / 2, cy - alto / 2, ancho, alto, alto / 2);
+        textoCentrado(dc, cx, cy, fuente, texto, NEGRO);
+    }
 }
