@@ -25,6 +25,11 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# garmin connect iq
+/garmin/bin/
+*.prg
+*.iq
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
