@@ -212,4 +212,62 @@ module Ui {
         dc.setPenWidth(1);
         dibujarIcono(dc, icono, x, y, BLANCO);
     }
+    // ---------- Iconos (dibujados con primitivas) ----------
+
+    function dibujarIcono(dc as Dc, tipo as Symbol, x as Number, y as Number, color as Number) as Void {
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(s(2));
+        if (tipo == :punto) {
+            dc.fillCircle(x, y, s(4));
+        } else if (tipo == :reloj) {
+            dc.drawCircle(x, y, s(7));
+            dc.drawLine(x, y, x, y - s(4));
+            dc.drawLine(x, y, x + s(3), y + s(2));
+        } else if (tipo == :giro) {
+            dc.drawArc(x, y, s(6), Graphics.ARC_CLOCKWISE, 90, 180);
+        } else if (tipo == :refrescar) {
+            dc.drawArc(x, y, s(6), Graphics.ARC_CLOCKWISE, 70, 110);
+            var p = punto(x, y, s(6), 70);
+            dc.fillPolygon([[p[0] - s(4), p[1] - s(3)], [p[0] + s(3), p[1] - s(4)], [p[0] + s(1), p[1] + s(3)]]);
+        } else if (tipo == :sinRed) {
+            dc.drawArc(x, y + s(4), s(9), Graphics.ARC_COUNTER_CLOCKWISE, 50, 130);
+            dc.drawArc(x, y + s(4), s(5), Graphics.ARC_COUNTER_CLOCKWISE, 50, 130);
+            dc.fillCircle(x, y + s(4), s(2));
+            dc.drawLine(x - s(7), y - s(6), x + s(7), y + s(7));
+        } else if (tipo == :flecha) {
+            dc.drawLine(x - s(2), y - s(5), x + s(3), y);
+            dc.drawLine(x + s(3), y, x - s(2), y + s(5));
+        } else if (tipo == :abajo) {
+            dc.drawLine(x - s(6), y - s(3), x, y + s(3));
+            dc.drawLine(x, y + s(3), x + s(6), y - s(3));
+        } else if (tipo == :check) {
+            dc.setPenWidth(s(5));
+            dc.drawLine(x - s(13), y, x - s(4), y + s(9));
+            dc.drawLine(x - s(4), y + s(9), x + s(14), y - s(9));
+        } else if (tipo == :equis) {
+            dc.drawLine(x - s(4), y - s(4), x + s(4), y + s(4));
+            dc.drawLine(x - s(4), y + s(4), x + s(4), y - s(4));
+        } else if (tipo == :pulsera) {
+            dc.drawRoundedRectangle(x - s(7), y - s(8), s(14), s(16), s(4));
+            dc.fillRectangle(x - s(4), y - s(13), s(8), s(4));
+            dc.fillRectangle(x - s(4), y + s(9), s(8), s(4));
+        } else if (tipo == :telefono) {
+            dc.drawRoundedRectangle(x - s(7), y - s(11), s(14), s(22), s(3));
+            dc.drawLine(x - s(2), y + s(7), x + s(2), y + s(7));
+        }
+        dc.setPenWidth(1);
+    }
+
+    // Línea discontinua horizontal.
+    function guiones(dc as Dc, x1 as Number, x2 as Number, y as Number, color as Number) as Void {
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(s(2));
+        var x = x1;
+        while (x < x2) {
+            var fin = (x + s(5) < x2) ? x + s(5) : x2;
+            dc.drawLine(x, y, fin, y);
+            x += s(9);
+        }
+        dc.setPenWidth(1);
+    }
 }
