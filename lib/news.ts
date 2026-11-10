@@ -278,16 +278,18 @@ function decodificar(texto: string): string {
 
 /** Etiqueta para la píldora del reloj: mayúsculas, máx. 2 palabras y 16 caracteres. */
 function limpiarCategoria(valor: string): string {
-  return valor
+  const palabras = valor
     .replace(/^\s*(\d+[.)]|[-*•])\s*/, '')
     .replace(/[*_`#"“”]/g, '')
     .trim()
     .toUpperCase()
     .split(/\s+/)
-    .slice(0, 2)
-    .join(' ')
-    .slice(0, 16)
-    .trim();
+    .filter(Boolean)
+    .slice(0, 2);
+  // Corta por palabras completas: "INTELIGENCIA ARTIFICIAL" -> "INTELIGENCIA", nunca "INTELIGENCIA ART".
+  const dos = palabras.join(' ');
+  if (dos.length <= 16) return dos;
+  return (palabras[0] ?? '').slice(0, 16);
 }
 
 function demo(tema: Tema, fecha: string): ResumenDelDia {
