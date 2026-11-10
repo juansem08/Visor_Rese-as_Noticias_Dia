@@ -1,5 +1,9 @@
 import { esTema, obtenerResumen } from '@/lib/news';
 
+export const dynamic = 'force-dynamic';
+// RSS + Gemini (con modelos de respaldo de hasta 25 s cada uno).
+export const maxDuration = 90;
+
 // GET /api/news?tema=deportes -> { fecha, tema, noticias: [3 textos], categorias, origen }
 // Es lo único que consume el reloj Garmin. Sin tema (o con uno inválido) usa "mundo".
 export async function GET(request: Request) {
