@@ -8,8 +8,7 @@ import Toybox.Time;
 // En el simulador puedes usar "http://localhost:3000/api/news" desactivando
 // "Settings > Use Device HTTPS Requirements".
 (:background)
-// TODO: al publicar en Vercel, cambiar por "https://TU-PROYECTO.vercel.app/api/news"
-const BACKEND_URL = "http://localhost:3000/api/news";
+const BACKEND_URL = "https://visordenoticias.vercel.app/api/news";
 
 // Lógica compartida entre la app y el servicio en segundo plano.
 (:background)
