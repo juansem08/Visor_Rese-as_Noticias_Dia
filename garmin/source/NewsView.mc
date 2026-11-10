@@ -132,4 +132,53 @@ class NewsView extends WatchUi.View {
         WatchUi.requestUpdate();
     }
 
+    // ======================================================================
+    // Controles (ver NewsDelegate)
+    // ======================================================================
+
+    // Deslizar arriba / DOWN
+    function siguiente() as Void {
+        if (_noticias.size() == 0) {
+            return;
+        }
+        if (_pantalla == PANTALLA_PORTADA) {
+            abrirNoticia(_indice, 1);
+        } else if (_pantalla == PANTALLA_NOTICIA) {
+            if (_indice < _noticias.size() - 1) {
+                abrirNoticia(_indice + 1, 1);
+            } else {
+                _pantalla = PANTALLA_FIN;
+                WatchUi.requestUpdate();
+            }
+        }
+    }
+
+    // Deslizar abajo / UP
+    function anterior() as Void {
+        if (_noticias.size() == 0) {
+            return;
+        }
+        if (_pantalla == PANTALLA_NOTICIA) {
+            if (_indice > 0) {
+                abrirNoticia(_indice - 1, -1);
+            } else {
+                _pantalla = PANTALLA_PORTADA;
+                WatchUi.requestUpdate();
+            }
+        } else if (_pantalla == PANTALLA_FIN) {
+            abrirNoticia(_noticias.size() - 1, -1);
+        }
+    }
+
+
+    private function abrirNoticia(indice as Number, direccion as Number) as Void {
+        _indice = indice;
+        _pantalla = PANTALLA_NOTICIA;
+        _leidas = _leidas | (1 << indice);
+        // El titular entra desde abajo al avanzar y desde arriba al retroceder.
+        _offset = direccion * 64;
+        animar();
+        WatchUi.requestUpdate();
+    }
+
 }
