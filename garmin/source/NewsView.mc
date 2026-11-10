@@ -76,4 +76,36 @@ class NewsView extends WatchUi.View {
         _offset = 0;
     }
 
+    // ======================================================================
+    // Datos
+    // ======================================================================
+
+    // forzar = true cuando cambian los ajustes: se pide aunque haya una petición en curso.
+    function actualizar(forzar as Boolean) as Void {
+        if (_cargando && !forzar) {
+            return;
+        }
+        _cargando = true;
+        animar();
+        WatchUi.requestUpdate();
+        Config.pedirNoticias(method(:onRespuesta));
+    }
+
+    function onRespuesta(codigo as Number, data as Dictionary or String or Null) as Void {
+        var datos = Config.extraer(codigo, data);
+        if (datos != null) {
+            // Ignora respuestas de un tema que el usuario ya cambió.
+            if (!(datos.get("tema") as String).equals(Config.temaActual())) {
+                return;
+            }
+            _cargando = false;
+            NewsView.guardar(datos);
+            recibir(datos);
+            return;
+        }
+        _cargando = false;
+        _codigoError = codigo;
+        WatchUi.requestUpdate();
+    }
+
 }
