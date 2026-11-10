@@ -21,3 +21,11 @@ const ETIQUETAS: Record<Tema, string> = {
   salud: 'SALUD',
   cultura: 'CULTURA',
 };
+
+export type ResumenDelDia = {
+  fecha: string; // YYYY-MM-DD en la zona horaria configurada
+  tema: Tema;
+  noticias: [string, string, string];
+  categorias: [string, string, string]; // etiqueta corta de cada noticia (p. ej. "ECONOMÍA")
+  origen: 'ia' | 'demo';
+};
