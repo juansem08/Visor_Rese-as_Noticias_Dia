@@ -10,7 +10,10 @@
             <iq:product id="fr165"/>
             <iq:product id="fr165m"/>
         </iq:products>
-        <iq:permissions/>
+        <iq:permissions>
+            <iq:uses-permission id="Communications"/>
+            <iq:uses-permission id="Background"/>
+        </iq:permissions>
         <iq:languages>
             <iq:language>spa</iq:language>
         </iq:languages>
