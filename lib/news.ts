@@ -117,8 +117,19 @@ async function obtenerTitulares(tema: Tema): Promise<string[]> {
   const titulares: string[] = [];
   for (const item of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
     const titulo = item[1].match(/<title>([\s\S]*?)<\/title>/)?.[1];
-    if (titulo) titulares.push(titulo);
+    if (titulo) titulares.push(decodificar(titulo));
     if (titulares.length >= 20) break;
   }
   return titulares;
+}
+
+function decodificar(texto: string): string {
+  return texto
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&amp;/g, '&')
+    .trim();
 }
