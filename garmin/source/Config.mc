@@ -81,5 +81,19 @@ module Config {
             // Si el sistema rechaza la programación, la app sigue funcionando sin aviso.
         }
     }
+
+    // ---------- Red ----------
+
+    function pedirNoticias(callback as Method) as Void {
+        Communications.makeWebRequest(
+            BACKEND_URL,
+            { "tema" => temaActual() },
+            {
+                :method => Communications.HTTP_REQUEST_METHOD_GET,
+                :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+            },
+            callback
+        );
+    }
 }
 
