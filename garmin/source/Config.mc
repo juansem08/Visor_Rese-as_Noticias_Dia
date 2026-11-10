@@ -95,5 +95,25 @@ module Config {
             callback
         );
     }
+
+    // Valida la respuesta del backend. Devuelve
+    // { "noticias" => Array<String>, "categorias" => Array<String>, "fecha" => String, "tema" => String } o null.
+    function extraer(codigo as Number, data) as Dictionary? {
+        if (codigo != 200 || !(data instanceof Dictionary)) {
+            return null;
+        }
+        var textos = textosDe(data.get("noticias"));
+        if (textos.size() == 0) {
+            return null;
+        }
+        var fecha = data.get("fecha");
+        var tema = data.get("tema");
+        return {
+            "noticias" => textos,
+            "categorias" => textosDe(data.get("categorias")),
+            "fecha" => (fecha instanceof String) ? fecha : "",
+            "tema" => (tema instanceof String) ? tema : temaActual()
+        };
+    }
 }
 
