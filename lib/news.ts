@@ -76,3 +76,17 @@ function limpiar(linea: string): string {
   if (palabras.length <= MAX_PALABRAS) return palabras.join(' ');
   return palabras.slice(0, MAX_PALABRAS).join(' ').replace(/[,;:.]$/, '') + '...';
 }
+
+/** Etiqueta para la píldora del reloj: mayúsculas, máx. 2 palabras y 16 caracteres. */
+function limpiarCategoria(valor: string): string {
+  return valor
+    .replace(/^\s*(\d+[.)]|[-*•])\s*/, '')
+    .replace(/[*_`#"“”]/g, '')
+    .trim()
+    .toUpperCase()
+    .split(/\s+/)
+    .slice(0, 2)
+    .join(' ')
+    .slice(0, 16)
+    .trim();
+}
