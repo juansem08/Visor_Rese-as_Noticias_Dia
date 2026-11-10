@@ -1,0 +1,4 @@
+<properties>
+    <!-- Índice en Config.TEMAS: 0 mundo, 1 tecnologia, 2 deportes, 3 economia, 4 ciencia, 5 salud, 6 cultura -->
+    <property id="Tema" type="number">0</property>
+</properties>
