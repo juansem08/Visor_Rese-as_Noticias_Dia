@@ -1,16 +1,16 @@
-export const metadata = {
-  title: 'Visor de Resúmenes de Noticias del Día | DailyBrief AI',
-  description: 'Visor de Resúmenes de Noticias del Día para Wear OS y React Native con Gemini SDK',
-}
+import type { ReactNode } from 'react';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export const metadata = {
+  title: 'Noticias del Día – Backend',
+  description: 'Backend del visor de noticias para Garmin Forerunner 165',
+};
+
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
-      <body style={{ margin: 0, padding: 0, backgroundColor: '#05070E', overflowX: 'hidden' }}>{children}</body>
+      <body style={{ margin: 0, background: '#000', color: '#fff', fontFamily: 'system-ui, sans-serif' }}>
+        {children}
+      </body>
     </html>
-  )
+  );
 }
