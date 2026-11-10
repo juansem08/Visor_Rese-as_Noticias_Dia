@@ -1,7 +1,20 @@
 <properties>
-    <!-- Índice en Config.TEMAS: 0 mundo, 1 tecnologia, 2 deportes, 3 economia, 4 ciencia, 5 salud, 6 cultura -->
-    <property id="Tema" type="number">0</property>
+    <!-- Temas: se pueden elegir varios; las 3 noticias se reparten entre ellos -->
+    <property id="TemaMundo" type="boolean">true</property>
+    <property id="TemaTecnologia" type="boolean">false</property>
+    <property id="TemaDeportes" type="boolean">false</property>
+    <property id="TemaEconomia" type="boolean">false</property>
+    <property id="TemaCiencia" type="boolean">false</property>
+    <property id="TemaSalud" type="boolean">false</property>
+    <property id="TemaCultura" type="boolean">false</property>
+
+    <!-- Aviso diario -->
     <property id="AvisoActivo" type="boolean">true</property>
     <property id="HoraAviso" type="number">7</property>
     <property id="MinutoAviso" type="number">0</property>
+
+    <!-- Lectura en el reloj -->
+    <property id="TamanoTexto" type="number">0</property>
+    <property id="Vibrar" type="boolean">true</property>
+    <property id="AbrirDirecto" type="boolean">false</property>
 </properties>

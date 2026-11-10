@@ -1,31 +1,93 @@
 <!-- Ajustes que aparecen en la app Garmin Connect del teléfono -->
 <settings>
-    <setting propertyKey="@Properties.Tema" title="@Strings.TituloTema">
-        <settingConfig type="list">
-            <listEntry value="0">@Strings.TemaMundo</listEntry>
-            <listEntry value="1">@Strings.TemaTecnologia</listEntry>
-            <listEntry value="2">@Strings.TemaDeportes</listEntry>
-            <listEntry value="3">@Strings.TemaEconomia</listEntry>
-            <listEntry value="4">@Strings.TemaCiencia</listEntry>
-            <listEntry value="5">@Strings.TemaSalud</listEntry>
-            <listEntry value="6">@Strings.TemaCultura</listEntry>
-        </settingConfig>
-    </setting>
 
-    <setting propertyKey="@Properties.AvisoActivo" title="@Strings.TituloAviso">
-        <settingConfig type="boolean"/>
-    </setting>
+    <!-- 1. Temas (varios a la vez) -->
+    <group id="GrupoTemas" title="@Strings.GrupoTemas" description="@Strings.DescTemas">
+        <setting propertyKey="@Properties.TemaMundo" title="@Strings.TemaMundo">
+            <settingConfig type="boolean"/>
+        </setting>
+        <setting propertyKey="@Properties.TemaTecnologia" title="@Strings.TemaTecnologia">
+            <settingConfig type="boolean"/>
+        </setting>
+        <setting propertyKey="@Properties.TemaDeportes" title="@Strings.TemaDeportes">
+            <settingConfig type="boolean"/>
+        </setting>
+        <setting propertyKey="@Properties.TemaEconomia" title="@Strings.TemaEconomia">
+            <settingConfig type="boolean"/>
+        </setting>
+        <setting propertyKey="@Properties.TemaCiencia" title="@Strings.TemaCiencia">
+            <settingConfig type="boolean"/>
+        </setting>
+        <setting propertyKey="@Properties.TemaSalud" title="@Strings.TemaSalud">
+            <settingConfig type="boolean"/>
+        </setting>
+        <setting propertyKey="@Properties.TemaCultura" title="@Strings.TemaCultura">
+            <settingConfig type="boolean"/>
+        </setting>
+    </group>
 
-    <setting propertyKey="@Properties.HoraAviso" title="@Strings.TituloHora" prompt="@Strings.PromptHora">
-        <settingConfig type="numeric" min="0" max="23"/>
-    </setting>
+    <!-- 2. Aviso diario -->
+    <group id="GrupoAviso" title="@Strings.GrupoAviso" description="@Strings.DescAviso">
+        <setting propertyKey="@Properties.AvisoActivo" title="@Strings.TituloAviso">
+            <settingConfig type="boolean"/>
+        </setting>
+    </group>
 
-    <setting propertyKey="@Properties.MinutoAviso" title="@Strings.TituloMinuto">
-        <settingConfig type="list">
-            <listEntry value="0">@Strings.Min00</listEntry>
-            <listEntry value="15">@Strings.Min15</listEntry>
-            <listEntry value="30">@Strings.Min30</listEntry>
-            <listEntry value="45">@Strings.Min45</listEntry>
-        </settingConfig>
-    </setting>
+    <!-- 2b. Hora del aviso: solo se muestra con el aviso activado -->
+    <group id="GrupoHora" title="@Strings.GrupoHora" description="@Strings.DescHora"
+           enableIfTrue="@Properties.AvisoActivo">
+        <setting propertyKey="@Properties.HoraAviso" title="@Strings.TituloHora">
+            <settingConfig type="list">
+                <listEntry value="0">@Strings.H0</listEntry>
+                <listEntry value="1">@Strings.H1</listEntry>
+                <listEntry value="2">@Strings.H2</listEntry>
+                <listEntry value="3">@Strings.H3</listEntry>
+                <listEntry value="4">@Strings.H4</listEntry>
+                <listEntry value="5">@Strings.H5</listEntry>
+                <listEntry value="6">@Strings.H6</listEntry>
+                <listEntry value="7">@Strings.H7</listEntry>
+                <listEntry value="8">@Strings.H8</listEntry>
+                <listEntry value="9">@Strings.H9</listEntry>
+                <listEntry value="10">@Strings.H10</listEntry>
+                <listEntry value="11">@Strings.H11</listEntry>
+                <listEntry value="12">@Strings.H12</listEntry>
+                <listEntry value="13">@Strings.H13</listEntry>
+                <listEntry value="14">@Strings.H14</listEntry>
+                <listEntry value="15">@Strings.H15</listEntry>
+                <listEntry value="16">@Strings.H16</listEntry>
+                <listEntry value="17">@Strings.H17</listEntry>
+                <listEntry value="18">@Strings.H18</listEntry>
+                <listEntry value="19">@Strings.H19</listEntry>
+                <listEntry value="20">@Strings.H20</listEntry>
+                <listEntry value="21">@Strings.H21</listEntry>
+                <listEntry value="22">@Strings.H22</listEntry>
+                <listEntry value="23">@Strings.H23</listEntry>
+            </settingConfig>
+        </setting>
+        <setting propertyKey="@Properties.MinutoAviso" title="@Strings.TituloMinuto">
+            <settingConfig type="list">
+                <listEntry value="0">@Strings.Min00</listEntry>
+                <listEntry value="15">@Strings.Min15</listEntry>
+                <listEntry value="30">@Strings.Min30</listEntry>
+                <listEntry value="45">@Strings.Min45</listEntry>
+            </settingConfig>
+        </setting>
+    </group>
+
+    <!-- 3. Lectura en el reloj -->
+    <group id="GrupoLectura" title="@Strings.GrupoLectura" description="@Strings.DescLectura">
+        <setting propertyKey="@Properties.TamanoTexto" title="@Strings.TituloTamano">
+            <settingConfig type="list">
+                <listEntry value="0">@Strings.TamanoGrande</listEntry>
+                <listEntry value="1">@Strings.TamanoMediano</listEntry>
+                <listEntry value="2">@Strings.TamanoPequeno</listEntry>
+            </settingConfig>
+        </setting>
+        <setting propertyKey="@Properties.Vibrar" title="@Strings.TituloVibrar">
+            <settingConfig type="boolean"/>
+        </setting>
+        <setting propertyKey="@Properties.AbrirDirecto" title="@Strings.TituloDirecto">
+            <settingConfig type="boolean"/>
+        </setting>
+    </group>
 </settings>

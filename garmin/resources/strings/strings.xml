@@ -1,8 +1,11 @@
 <strings>
     <string id="AppName">Noticias del Dia</string>
 
-    <!-- Ajustes (se muestran en el teléfono) -->
-    <string id="TituloTema">Tema de las noticias</string>
+    <!-- ===== Ajustes (se muestran en Garmin Connect, en el teléfono) ===== -->
+
+    <!-- Temas -->
+    <string id="GrupoTemas">Temas de tus noticias</string>
+    <string id="DescTemas">Activa uno o varios. Tus 3 noticias diarias se reparten entre los temas elegidos.</string>
     <string id="TemaMundo">Mundo</string>
     <string id="TemaTecnologia">Tecnología</string>
     <string id="TemaDeportes">Deportes</string>
@@ -11,12 +14,50 @@
     <string id="TemaSalud">Salud</string>
     <string id="TemaCultura">Cultura</string>
 
-    <string id="TituloAviso">Aviso diario en el reloj</string>
-    <string id="TituloHora">Hora del aviso (0-23)</string>
-    <string id="PromptHora">Ejemplo: 7 = 7:00 a. m.</string>
-    <string id="TituloMinuto">Minuto del aviso</string>
-    <string id="Min00">:00</string>
-    <string id="Min15">:15</string>
-    <string id="Min30">:30</string>
-    <string id="Min45">:45</string>
+    <!-- Aviso -->
+    <string id="GrupoAviso">Aviso diario</string>
+    <string id="DescAviso">El reloj vibra a la hora elegida con tus noticias listas para leer.</string>
+    <string id="TituloAviso">Activar aviso en el reloj</string>
+    <string id="GrupoHora">Hora del aviso</string>
+    <string id="DescHora">Elige a qué hora quieres recibir tu resumen.</string>
+    <string id="TituloHora">Hora</string>
+    <string id="TituloMinuto">Minutos</string>
+    <string id="H0">12 a. m. (medianoche)</string>
+    <string id="H1">1 a. m.</string>
+    <string id="H2">2 a. m.</string>
+    <string id="H3">3 a. m.</string>
+    <string id="H4">4 a. m.</string>
+    <string id="H5">5 a. m.</string>
+    <string id="H6">6 a. m.</string>
+    <string id="H7">7 a. m.</string>
+    <string id="H8">8 a. m.</string>
+    <string id="H9">9 a. m.</string>
+    <string id="H10">10 a. m.</string>
+    <string id="H11">11 a. m.</string>
+    <string id="H12">12 p. m. (mediodía)</string>
+    <string id="H13">1 p. m.</string>
+    <string id="H14">2 p. m.</string>
+    <string id="H15">3 p. m.</string>
+    <string id="H16">4 p. m.</string>
+    <string id="H17">5 p. m.</string>
+    <string id="H18">6 p. m.</string>
+    <string id="H19">7 p. m.</string>
+    <string id="H20">8 p. m.</string>
+    <string id="H21">9 p. m.</string>
+    <string id="H22">10 p. m.</string>
+    <string id="H23">11 p. m.</string>
+    <string id="Min00">En punto (:00)</string>
+    <string id="Min15">Y cuarto (:15)</string>
+    <string id="Min30">Y media (:30)</string>
+    <string id="Min45">Menos cuarto (:45)</string>
+
+    <!-- Lectura -->
+    <string id="GrupoLectura">Lectura en el reloj</string>
+    <string id="DescLectura">Personaliza cómo se ven y se recorren las noticias.</string>
+    <string id="TituloTamano">Tamaño del texto</string>
+    <string id="TamanoGrande">Grande</string>
+    <string id="TamanoMediano">Mediano</string>
+    <string id="TamanoPequeno">Pequeño</string>
+    <string id="TituloVibrar">Vibrar al pasar de noticia</string>
+    <string id="TituloDirecto">Abrir directo en la primera noticia</string>
 </strings>
