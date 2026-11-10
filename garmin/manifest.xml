@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<iq:manifest version="3" xmlns:iq="http://www.garmin.com/xml/connectiq">
+    <iq:application id="cb20e1e76b614989b2967ccdd8e4e75e"
+                    type="watch-app"
+                    name="@Strings.AppName"
+                    entry="NewsApp"
+                    launcherIcon="@Drawables.LauncherIcon"
+                    minApiLevel="3.2.0">
+        <iq:products>
+            <iq:product id="fr165"/>
+        </iq:products>
+        <iq:permissions/>
+        <iq:languages>
+            <iq:language>spa</iq:language>
+        </iq:languages>
+        <iq:barrels/>
+    </iq:application>
+</iq:manifest>
