@@ -33,3 +33,8 @@ export type ResumenDelDia = {
 const MAX_PALABRAS = 15;
 const ZONA_HORARIA = process.env.NEWS_TIMEZONE ?? 'America/Bogota';
 const MODELO = process.env.GEMINI_MODEL ?? 'gemini-3.8-flash';
+
+export function fechaHoy(): string {
+  // en-CA produce el formato YYYY-MM-DD
+  return new Intl.DateTimeFormat('en-CA', { timeZone: ZONA_HORARIA }).format(new Date());
+}
