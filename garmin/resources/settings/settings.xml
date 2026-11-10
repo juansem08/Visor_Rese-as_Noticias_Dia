@@ -11,4 +11,9 @@
             <listEntry value="6">@Strings.TemaCultura</listEntry>
         </settingConfig>
     </setting>
+
+    <setting propertyKey="@Properties.AvisoActivo" title="@Strings.TituloAviso">
+        <settingConfig type="boolean"/>
+    </setting>
 </settings>
+
