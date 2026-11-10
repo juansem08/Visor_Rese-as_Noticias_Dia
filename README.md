@@ -34,6 +34,37 @@ En la app **Garmin Connect** → Dispositivo → Apps Connect IQ → *Noticias d
 > "¿Abrir Noticias del Dia?". El aviso queda programado después de abrir la app una vez;
 > si cambias la hora con la app cerrada, se aplica la próxima vez que la abras o tras el siguiente aviso.
 
+## 1. Backend
+
+```bash
+npm install
+cp .env.example .env.local   # pon tu GEMINI_API_KEY
+npm run dev                  # http://localhost:3000/api/news
+```
+
+Sin `GEMINI_API_KEY` responde 3 textos de demostración.
+
+### Publicar en Vercel (necesario para el reloj real: exige HTTPS)
+
+1. Sube el repositorio a GitHub (sin `.env.local`, que está en `.gitignore`).
+2. En https://vercel.com → **Add New → Project** → importa el repositorio (Next.js se detecta solo).
+3. En **Environment Variables** agrega:
+
+   | Variable | Valor |
+   |---|---|
+   | `GEMINI_API_KEY` | tu clave de Google AI Studio |
+   | `GEMINI_MODEL` | `gemini-3.8-flash` |
+   | `NEWS_TIMEZONE` | `America/Bogota` |
+   | `CRON_SECRET` | una contraseña larga inventada (protege `/api/cron`) |
+
+4. **Deploy**. Comprueba `https://TU-PROYECTO.vercel.app/api/news` (debe decir `"origen":"ia"`).
+5. Pon esa URL en `BACKEND_URL` de `garmin/source/Config.mc` y recompila la app.
+
+Usa la URL de **producción** (`TU-PROYECTO.vercel.app`): las URLs de vista previa de Vercel
+piden inicio de sesión y el reloj no puede abrirlas.
+
+Notas: las noticias se guardan 30 min en la CDN de Vercel y, si Gemini falla, se sirve el último
+resumen bueno. El cron diario (11:00 UTC = 6:00 Bogotá) funciona en el plan gratuito (Hobby).
 
 ## 2. App del reloj (`garmin/`)
 
