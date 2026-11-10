@@ -64,4 +64,28 @@ module Ui {
             dc.fillCircle(x, y, radio * (pasos - i) / pasos);
         }
     }
+    // ---------- Anillo ----------
+
+    function grados(a as Number) as Number {
+        var r = a % 360;
+        return (r < 0) ? r + 360 : r;
+    }
+
+    function punto(cx as Number, cy as Number, r as Number, angulo as Number) as [Number, Number] {
+        var rad = angulo * Math.PI / 180.0;
+        return [(cx + r * Math.cos(rad)).toNumber(), (cy - r * Math.sin(rad)).toNumber()];
+    }
+
+    // Arco con puntas redondeadas, en sentido horario de "desde" a "hasta" (grados matemáticos).
+    function arco(dc as Dc, cx as Number, cy as Number, r as Number, ancho as Number,
+                  color as Number, desde as Number, hasta as Number) as Void {
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(ancho);
+        dc.drawArc(cx, cy, r, Graphics.ARC_CLOCKWISE, grados(desde), grados(hasta));
+        dc.setPenWidth(1);
+        var a = punto(cx, cy, r, desde);
+        var b = punto(cx, cy, r, hasta);
+        dc.fillCircle(a[0], a[1], ancho / 2);
+        dc.fillCircle(b[0], b[1], ancho / 2);
+    }
 }
