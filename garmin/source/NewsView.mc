@@ -485,4 +485,36 @@ class NewsView extends WatchUi.View {
             "Pidiendo las noticias\na tu teléfono", Ui.GRIS_CLARO);
     }
 
+    // ---------- Error sin noticias guardadas: SIN CONEXIÓN ----------
+
+    private function dibujarSinConexion(dc as Dc, cx as Number, cy as Number) as Void {
+        Ui.brillo(dc, cx, Ui.s(10), Ui.s(190), Ui.BRILLO_NARANJA);
+        Ui.anillo(dc, cx, cy, 0, Ui.LIMA);
+        Ui.marcaStart(dc, cx, cy);
+
+        // Reloj - - x - - teléfono
+        var y = Ui.s(92);
+        var sep = Ui.s(76);
+        Ui.circuloVidrio(dc, cx - sep, y, Ui.s(26), :pulsera);
+        Ui.circuloVidrio(dc, cx + sep, y, Ui.s(26), :telefono);
+        Ui.guiones(dc, cx - sep + Ui.s(32), cx - Ui.s(16), y, Ui.GRIS_OSCURO);
+        Ui.guiones(dc, cx + Ui.s(16), cx + sep - Ui.s(32), y, Ui.GRIS_OSCURO);
+        dc.setColor(Ui.NARANJA, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(cx, y, Ui.s(11));
+        Ui.dibujarIcono(dc, :equis, cx, y, Ui.NEGRO);
+
+        var codigo = _codigoError;
+        var titulo = "SIN CONEXIÓN";
+        var detalle = "Conecta el teléfono y abre\nGarmin Connect";
+        if (codigo != null && codigo > 0) {
+            titulo = "SIN NOTICIAS";
+            detalle = "El servidor respondió\ncon error " + codigo;
+        } else if (codigo != null && codigo != Communications.BLE_CONNECTION_UNAVAILABLE) {
+            detalle = "Revisa la conexión del\nteléfono (código " + codigo + ")";
+        }
+        Ui.titulo(dc, cx, Ui.s(160), titulo, Ui.BLANCO);
+        Ui.textoCentrado(dc, cx, Ui.s(214), Ui.fTexto, detalle, Ui.GRIS_CLARO);
+
+        Ui.botonAccion(dc, cx, Ui.s(276), "REINTENTAR", :refrescar);
+    }
 }
