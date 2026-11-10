@@ -160,3 +160,47 @@ async function pedirAGemini(ai: GoogleGenAI, prompt: string, conBusqueda: boolea
   }
   throw ultimoError;
 }
+
+async function generarResumen(tema: Tema, fecha: string): Promise<ResumenDelDia> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    console.warn('GEMINI_API_KEY no configurada: se devuelven noticias de demostración.');
+    return demo(tema, fecha);
+  }
+
+  const formato = [
+    `Resume cada una en español en MÁXIMO ${MAX_PALABRAS} palabras, en una sola frase clara.`,
+    'Responde SOLO con 3 líneas con el formato: CATEGORÍA | resumen',
+    'La categoría es 1 o 2 palabras en mayúsculas (ej.: ECONOMÍA, FÚTBOL, CLIMA, ELECCIONES).',
+    'Sin numeración, sin viñetas, sin markdown, sin fuentes ni enlaces.',
+  ];
+
+  try {
+    const titulares = await obtenerTitulares(tema).catch((err) => {
+      console.warn(`No se pudo leer el RSS de "${tema}":`, err);
+      return [] as string[];
+    });
+
+    const prompt = [
+      `Hoy es ${fecha}. Estos son titulares reales de hoy sobre ${TEMAS[tema]}:`,
+      ...titulares.map((t) => `- ${t}`),
+      '',
+      'Elige las 3 noticias más importantes y distintas entre sí, priorizando las de alcance global.',
+      'Usa SOLO la información de los titulares; no inventes datos.',
+      ...formato,
+    ].join('\n');
+
+    const res = await pedirAGemini(new GoogleGenAI({ apiKey }), prompt, false);
+    const lineas = (res.text ?? '').split('\n').filter(Boolean).slice(0, 3);
+    return {
+      fecha,
+      tema,
+      noticias: lineas as any,
+      categorias: [ETIQUETAS[tema], ETIQUETAS[tema], ETIQUETAS[tema]],
+      origen: 'ia',
+    };
+  } catch (err) {
+    console.error(`Error generando el resumen de "${tema}" con la IA:`, err);
+    return demo(tema, fecha);
+  }
+}
