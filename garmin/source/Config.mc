@@ -56,6 +56,30 @@ module Config {
 
     function minutoAviso() as Number {
         return leerNumero("MinutoAviso", 0, 0, 59);
+        }
+
+    // ---------- Aviso diario ----------
+
+    // Programa el servicio en segundo plano para la próxima hora:minuto elegida.
+    function programarAviso() as Void {
+        if (!(Toybox has :Background)) {
+            return;
+        }
+        try {
+            if (!avisoActivo()) {
+                Background.deleteTemporalEvent();
+                return;
+            }
+            var hora = horaAviso();
+            var minuto = minutoAviso();
+            var cuando = Time.today().add(new Time.Duration(hora * 3600 + minuto * 60));
+            if (cuando.compare(Time.now()) <= 0) {
+                cuando = cuando.add(new Time.Duration(86400));
+            }
+            Background.registerForTemporalEvent(cuando);
+        } catch (e) {
+            // Si el sistema rechaza la programación, la app sigue funcionando sin aviso.
+        }
     }
 }
 
