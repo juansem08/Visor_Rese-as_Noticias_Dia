@@ -200,12 +200,24 @@ async function generarResumen(tema: Tema, fecha: string): Promise<ResumenDelDia>
           ].join('\n');
 
     const res = await pedirAGemini(new GoogleGenAI({ apiKey }), prompt, titulares.length < 3);
-    const lineas = (res.text ?? '').split('\n').filter(Boolean).slice(0, 3);
+
+    const items = (res.text ?? '')
+      .split('\n')
+      .map((linea) => {
+        const corte = linea.indexOf('|');
+        const categoria = corte >= 0 ? limpiarCategoria(linea.slice(0, corte)) : '';
+        const texto = limpiar(corte >= 0 ? linea.slice(corte + 1) : linea);
+        return { categoria: categoria || ETIQUETAS[tema], texto };
+      })
+      .filter((i) => i.texto.length > 0)
+      .slice(0, 3);
+
+    if (items.length < 3) throw new Error(`Respuesta incompleta de la IA: ${res.text}`);
     return {
       fecha,
       tema,
-      noticias: lineas as any,
-      categorias: [ETIQUETAS[tema], ETIQUETAS[tema], ETIQUETAS[tema]],
+      noticias: items.map((i) => i.texto) as [string, string, string],
+      categorias: items.map((i) => i.categoria) as [string, string, string],
       origen: 'ia',
     };
   } catch (err) {
