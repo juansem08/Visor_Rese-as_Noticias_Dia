@@ -19,8 +19,18 @@ module Config {
     const TEMAS = ["mundo", "tecnologia", "deportes", "economia", "ciencia", "salud", "cultura"] as Array<String>;
     const NOMBRES = ["MUNDO", "TECNOLOGÍA", "DEPORTES", "ECONOMÍA", "CIENCIA", "SALUD", "CULTURA"] as Array<String>;
 
+    // ---------- Ajustes del teléfono ----------
+
+    function leerNumero(clave as String, porDefecto as Number, minimo as Number, maximo as Number) as Number {
+        var valor = Application.Properties.getValue(clave);
+        if (valor instanceof Number && valor >= minimo && valor <= maximo) {
+            return valor;
+        }
+        return porDefecto;
+    }
+
     function temaActual() as String {
-        return TEMAS[0];
+        return TEMAS[leerNumero("Tema", 0, 0, TEMAS.size() - 1)];
     }
 
     function nombreTema(tema as String) as String {
@@ -31,5 +41,12 @@ module Config {
         }
         return NOMBRES[0];
     }
-}
 
+    function avisoActivo() as Boolean {
+        var valor = Application.Properties.getValue("AvisoActivo");
+        if (valor instanceof Boolean) {
+            return valor;
+        }
+        return true;
+    }
+}
