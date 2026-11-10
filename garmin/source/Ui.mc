@@ -98,4 +98,12 @@ module Ui {
             arco(dc, cx, cy, r, ancho, (k < llenos) ? color : PISTA, desde, desde - ARCO_SEGMENTO);
         }
     }
+    // Perilla al final del progreso (círculo lima con centro negro).
+    function perilla(dc as Dc, cx as Number, cy as Number, angulo as Number) as Void {
+        var p = punto(cx, cy, s(RADIO_ANILLO), angulo);
+        dc.setColor(LIMA, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(p[0], p[1], s(11));
+        dc.setColor(NEGRO, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(p[0], p[1], s(5));
+    }
 }
