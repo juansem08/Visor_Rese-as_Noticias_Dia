@@ -161,6 +161,24 @@ async function pedirAGemini(ai: GoogleGenAI, prompt: string, conBusqueda: boolea
   throw ultimoError;
 }
 
+// Caché en memoria: una generación por tema y por día. La primera petición del día
+// (o el cron de la mañana) llama a la IA; el resto reutiliza el resultado.
+const cache = new Map<Tema, ResumenDelDia>();
+
+export async function obtenerResumen(tema: Tema = 'mundo', forzar = false): Promise<ResumenDelDia> {
+  const hoy = fechaHoy();
+  const guardado = cache.get(tema);
+  if (!forzar && guardado?.fecha === hoy) return guardado;
+
+  const promesa = generarResumen(tema, hoy).then((r) => {
+    if (r.origen === 'ia') {
+      cache.set(tema, r);
+    }
+    return r;
+  });
+  return promesa;
+}
+
 async function generarResumen(tema: Tema, fecha: string): Promise<ResumenDelDia> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
