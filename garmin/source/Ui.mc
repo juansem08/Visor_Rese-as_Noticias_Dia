@@ -36,6 +36,8 @@ module Ui {
     const START_DESDE = 22;         // arco que señala el botón START
     const START_HASTA = 38;
 
+    const DIAS = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"] as Array<String>;
+    const MESES = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"] as Array<String>;
     var escala as Float = 1.0;
 
     function s(v as Numeric) as Number {
@@ -269,5 +271,38 @@ module Ui {
             x += s(9);
         }
         dc.setPenWidth(1);
+    }
+    // ---------- Fechas ----------
+
+    // Fecha de hoy en formato "YYYY-MM-DD" (hora local del reloj).
+    function hoyIso() as String {
+        var info = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
+        return info.year.format("%04d") + "-" + (info.month as Number).format("%02d") + "-" + info.day.format("%02d");
+    }
+
+    // "2026-11-09" -> "LUN 09 NOV"
+    function fechaCorta(iso as String) as String {
+        if (iso.length() < 10) {
+            return "";
+        }
+        var anio = (iso.substring(0, 4) as String).toNumber();
+        var mes = (iso.substring(5, 7) as String).toNumber();
+        var dia = (iso.substring(8, 10) as String).toNumber();
+        if (anio == null || mes == null || dia == null || mes < 1 || mes > 12) {
+            return "";
+        }
+        // Mediodía UTC: el mismo día en cualquier zona horaria habitual.
+        var momento = Gregorian.moment({ :year => anio, :month => mes, :day => dia, :hour => 12 });
+        var info = Gregorian.info(momento, Time.FORMAT_SHORT);
+        return DIAS[(info.day_of_week as Number) - 1] + " " + dia.format("%02d") + " " + MESES[mes - 1];
+    }
+
+    // 6, 0 -> "6:00 a. m."
+    function horaTexto(hora as Number, minuto as Number) as String {
+        var h12 = hora % 12;
+        if (h12 == 0) {
+            h12 = 12;
+        }
+        return h12 + ":" + minuto.format("%02d") + ((hora < 12) ? " a. m." : " p. m.");
     }
 }
