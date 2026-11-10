@@ -38,11 +38,38 @@ module Ui {
 
     const DIAS = ["DOM", "LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB"] as Array<String>;
     const MESES = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"] as Array<String>;
+
     var escala as Float = 1.0;
 
     function s(v as Numeric) as Number {
         return (v * escala).toNumber();
     }
+
+    // ---------- Tipografía (resources/fonts) ----------
+    // Barlow Condensed Bold: títulos y números. Inter: titulares, etiquetas y textos.
+    // Valores iniciales = fuentes del sistema, por si una fuente no carga.
+    var fTitulo as FontType = Graphics.FONT_LARGE;      // "NOTICIAS", "ESTÁS AL DÍA"
+    var fTituloS as FontType = Graphics.FONT_MEDIUM;    // títulos largos
+    var fNumero as FontType = Graphics.FONT_TINY;       // "01/03", selector 1·2·3
+    var fFondo as FontType = Graphics.FONT_NUMBER_THAI_HOT; // número gigante de fondo
+    var fTitular as FontType = Graphics.FONT_MEDIUM;    // titular de la noticia
+    var fTitularM as FontType = Graphics.FONT_SMALL;
+    var fTitularS as FontType = Graphics.FONT_TINY;
+    var fEtiqueta as FontType = Graphics.FONT_XTINY;    // MAYÚSCULAS espaciadas: píldoras, botones, fechas
+    var fTexto as FontType = Graphics.FONT_XTINY;       // frases cortas
+
+    function cargarFuentes() as Void {
+        fTitulo = WatchUi.loadResource(Rez.Fonts.Titulo) as FontResource;
+        fTituloS = WatchUi.loadResource(Rez.Fonts.TituloS) as FontResource;
+        fNumero = WatchUi.loadResource(Rez.Fonts.Numero) as FontResource;
+        fFondo = WatchUi.loadResource(Rez.Fonts.Fondo) as FontResource;
+        fTitular = WatchUi.loadResource(Rez.Fonts.Titular) as FontResource;
+        fTitularM = WatchUi.loadResource(Rez.Fonts.TitularM) as FontResource;
+        fTitularS = WatchUi.loadResource(Rez.Fonts.TitularS) as FontResource;
+        fEtiqueta = WatchUi.loadResource(Rez.Fonts.Etiqueta) as FontResource;
+        fTexto = WatchUi.loadResource(Rez.Fonts.Texto) as FontResource;
+    }
+
     // ---------- Color ----------
 
     function mezclar(a as Number, b as Number, t as Float) as Number {
@@ -57,6 +84,7 @@ module Ui {
         var cb = (b >> desplazamiento) & 0xFF;
         return ca + ((cb - ca) * t).toNumber();
     }
+
     // Brillo radial suave: círculos concéntricos de negro al color (sin transparencias).
     function brillo(dc as Dc, x as Number, y as Number, radio as Number, color as Number) as Void {
         var pasos = 28;
@@ -66,6 +94,7 @@ module Ui {
             dc.fillCircle(x, y, radio * (pasos - i) / pasos);
         }
     }
+
     // ---------- Anillo ----------
 
     function grados(a as Number) as Number {
@@ -90,6 +119,7 @@ module Ui {
         dc.fillCircle(a[0], a[1], ancho / 2);
         dc.fillCircle(b[0], b[1], ancho / 2);
     }
+
     // Anillo de progreso: 3 arcos de 116° desde arriba en sentido horario.
     // "llenos" arcos van en "color"; el resto en el color de pista.
     function anillo(dc as Dc, cx as Number, cy as Number, llenos as Number, color as Number) as Void {
@@ -100,6 +130,7 @@ module Ui {
             arco(dc, cx, cy, r, ancho, (k < llenos) ? color : PISTA, desde, desde - ARCO_SEGMENTO);
         }
     }
+
     // Perilla al final del progreso (círculo lima con centro negro).
     function perilla(dc as Dc, cx as Number, cy as Number, angulo as Number) as Void {
         var p = punto(cx, cy, s(RADIO_ANILLO), angulo);
@@ -108,10 +139,12 @@ module Ui {
         dc.setColor(NEGRO, Graphics.COLOR_TRANSPARENT);
         dc.fillCircle(p[0], p[1], s(5));
     }
+
     // Arco corto junto al botón START (22°–38°).
     function marcaStart(dc as Dc, cx as Number, cy as Number) as Void {
         arco(dc, cx, cy, s(RADIO_ANILLO), s(GROSOR_ANILLO), LIMA, START_HASTA, START_DESDE);
     }
+
     // ---------- Texto ----------
 
     // La fuente más grande de la lista con la que "texto" cabe en "maxAncho".
@@ -134,6 +167,7 @@ module Ui {
         dc.setColor(color, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, y, fuente, texto, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
+
     // ---------- Componentes ----------
 
     // Etiqueta de categoría: píldora lima con texto negro.
@@ -145,6 +179,7 @@ module Ui {
         dc.fillRoundedRectangle(cx - ancho / 2, cy - alto / 2, ancho, alto, alto / 2);
         textoCentrado(dc, cx, cy, fuente, texto, NEGRO);
     }
+
     // Cápsula de vidrio con icono opcional y texto en varios colores y fuentes.
     function capsula(dc as Dc, cx as Number, cy as Number, icono as Symbol?, colorIcono as Number,
                      textos as Array<String>, colores as Array<Number>, fuentes as Array<FontType>,
@@ -187,6 +222,7 @@ module Ui {
         capsula(dc, cx, cy, icono, colorIcono, [texto] as Array<String>, [colorTexto] as Array<Number>,
             [fuente] as Array<FontType>, VIDRIO, VIDRIO_BORDE);
     }
+
     // Botón de acción START: píldora lima, texto negro y círculo negro con icono lima.
     function botonAccion(dc as Dc, cx as Number, cy as Number, texto as String, icono as Symbol) as Void {
         var fuente = fEtiqueta;
@@ -204,6 +240,7 @@ module Ui {
         dc.fillCircle(circuloX, cy, radioCirculo);
         dibujarIcono(dc, icono, circuloX, cy, LIMA);
     }
+
     // Círculo de vidrio con un icono dentro (pantalla sin conexión).
     function circuloVidrio(dc as Dc, x as Number, y as Number, radio as Number, icono as Symbol) as Void {
         dc.setColor(VIDRIO, Graphics.COLOR_TRANSPARENT);
@@ -214,6 +251,7 @@ module Ui {
         dc.setPenWidth(1);
         dibujarIcono(dc, icono, x, y, BLANCO);
     }
+
     // ---------- Iconos (dibujados con primitivas) ----------
 
     function dibujarIcono(dc as Dc, tipo as Symbol, x as Number, y as Number, color as Number) as Void {
@@ -272,6 +310,7 @@ module Ui {
         }
         dc.setPenWidth(1);
     }
+
     // ---------- Fechas ----------
 
     // Fecha de hoy en formato "YYYY-MM-DD" (hora local del reloj).
