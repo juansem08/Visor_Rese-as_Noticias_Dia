@@ -1,0 +1,14 @@
+<!-- Ajustes que aparecen en la app Garmin Connect del teléfono -->
+<settings>
+    <setting propertyKey="@Properties.Tema" title="@Strings.TituloTema">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.TemaMundo</listEntry>
+            <listEntry value="1">@Strings.TemaTecnologia</listEntry>
+            <listEntry value="2">@Strings.TemaDeportes</listEntry>
+            <listEntry value="3">@Strings.TemaEconomia</listEntry>
+            <listEntry value="4">@Strings.TemaCiencia</listEntry>
+            <listEntry value="5">@Strings.TemaSalud</listEntry>
+            <listEntry value="6">@Strings.TemaCultura</listEntry>
+        </settingConfig>
+    </setting>
+</settings>
