@@ -1,4 +1,5 @@
 import Toybox.Application.Storage;
+import Toybox.Attention;
 import Toybox.Communications;
 import Toybox.Graphics;
 import Toybox.Lang;
@@ -64,6 +65,18 @@ class NewsView extends WatchUi.View {
         if (tema instanceof String) {
             _tema = tema;
         }
+
+        // Ajuste "Abrir directo en la primera noticia"
+        if (Config.abrirDirecto() && _noticias.size() > 0) {
+            _pantalla = PANTALLA_NOTICIA;
+            _leidas = 1;
+        }
+    }
+
+    // Se llama cuando cambian los ajustes en el teléfono (tamaño del texto, etc.).
+    function aplicarAjustes() as Void {
+        _ajusteIndice = -1;
+        WatchUi.requestUpdate();
     }
 
     function onShow() as Void {
@@ -113,11 +126,16 @@ class NewsView extends WatchUi.View {
         var fechaNueva = datos.get("fecha") as String;
         var habiaNoticias = _noticias.size() > 0;
 
-        // Resumen distinto (otro día u otro tema): se empieza desde la portada.
+        // Resumen distinto (otro día u otro tema): se empieza desde la portada
+        // (o desde la primera noticia si así está configurado).
         if (!habiaNoticias || !temaNuevo.equals(_tema) || !fechaNueva.equals(_fecha)) {
             _indice = 0;
             _leidas = 0;
             _pantalla = PANTALLA_PORTADA;
+            if (Config.abrirDirecto()) {
+                _pantalla = PANTALLA_NOTICIA;
+                _leidas = 1;
+            }
         }
         _noticias = datos.get("noticias") as Array<String>;
         var categorias = datos.get("categorias");
@@ -202,6 +220,10 @@ class NewsView extends WatchUi.View {
         _indice = indice;
         _pantalla = PANTALLA_NOTICIA;
         _leidas = _leidas | (1 << indice);
+        // Pulso corto al pasar de noticia (ajuste "Vibrar al pasar de noticia").
+        if (Config.vibrar() && (Attention has :vibrate)) {
+            Attention.vibrate([new Attention.VibeProfile(30, 40)] as Array<Attention.VibeProfile>);
+        }
         // El titular entra desde abajo al avanzar y desde arriba al retroceder.
         _offset = direccion * 64;
         animar();
@@ -392,7 +414,9 @@ class NewsView extends WatchUi.View {
             return;
         }
         var texto = _noticias[_indice];
-        var fuentes = [Ui.fTitular, Ui.fTitularM, Ui.fTitularS] as Array<FontType>;
+        // Ajuste "Tamaño del texto": grande empieza en la fuente mayor, pequeño en la menor.
+        var todas = [Ui.fTitular, Ui.fTitularM, Ui.fTitularS] as Array<FontType>;
+        var fuentes = todas.slice(Config.tamanoTexto(), null);
         for (var i = 0; i < fuentes.size(); i++) {
             var ajustado = Graphics.fitTextToArea(texto, fuentes[i], areaW, areaH, false);
             if (ajustado != null) {

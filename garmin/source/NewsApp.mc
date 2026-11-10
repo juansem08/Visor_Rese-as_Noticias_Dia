@@ -50,6 +50,7 @@ class NewsApp extends Application.AppBase {
         Config.programarAviso();
         var view = _view;
         if (view != null) {
+            view.aplicarAjustes();
             view.actualizar(true);
         }
         WatchUi.requestUpdate();
