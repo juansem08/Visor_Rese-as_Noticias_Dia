@@ -42,3 +42,17 @@ export function fechaHoy(): string {
 export function esTema(valor: string | null | undefined): valor is Tema {
   return !!valor && Object.prototype.hasOwnProperty.call(TEMAS, valor);
 }
+
+function demo(tema: Tema, fecha: string): ResumenDelDia {
+  return {
+    fecha,
+    tema,
+    origen: 'demo',
+    noticias: [
+      'Modo demo: configura GEMINI_API_KEY en el backend para ver noticias reales.',
+      'Cada mañana el servidor pide a la IA tres noticias globales resumidas.',
+      'Desliza arriba o abajo, o usa los botones, para leer cada noticia.',
+    ],
+    categorias: ['CONFIGURACIÓN', 'CÓMO FUNCIONA', 'CONTROLES'],
+  };
+}
