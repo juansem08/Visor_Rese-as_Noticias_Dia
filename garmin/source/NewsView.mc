@@ -315,6 +315,76 @@ class NewsView extends WatchUi.View {
         Ui.botonAccion(dc, cx, Ui.s(318), "LEER RESUMEN", :flecha);
     }
 
+    // ---------- Noticia: carrusel vertical ----------
+
+    private function dibujarNoticia(dc as Dc, w as Number, cx as Number, cy as Number) as Void {
+        var total = _noticias.size();
+        var sinConexion = (_codigoError != null && !_cargando);
+
+        Ui.brillo(dc, cx, Ui.s(20), Ui.s(170), sinConexion ? Ui.BRILLO_NARANJA : Ui.BRILLO_MORADO);
+
+        // Número gigante de fondo
+        dc.setColor(Ui.FONDO_NUMERO, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(w - Ui.s(14), Ui.s(215), Ui.fFondo, (_indice + 1).format("%02d"),
+            Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
+
+        // Anillo: se llena un tercio por noticia, con la perilla al final
+        Ui.anillo(dc, cx, cy, _indice + 1, Ui.LIMA);
+        Ui.perilla(dc, cx, cy, 90 - 120 * (_indice + 1) + 2);
+
+        // Etiqueta de categoría
+        var categoria = (_indice < _categorias.size()) ? _categorias[_indice] : Config.nombreTema(_tema);
+        Ui.pildora(dc, cx, Ui.s(64), categoria);
+
+        // Titular (área 288 x 168), entra deslizándose
+        var areaW = Ui.s(288);
+        var areaH = Ui.s(168);
+        var centroY = Ui.s(170);
+        ajustar(areaW, areaH);
+        dc.setClip(cx - areaW / 2, centroY - areaH / 2, areaW, areaH);
+        Ui.textoCentrado(dc, cx, centroY + _offset, _ajusteFuente, _ajusteTexto, Ui.BLANCO);
+        dc.clearClip();
+
+        // Cápsula del pie: fecha + posición, o estado
+        var numero = (_indice + 1).format("%02d");
+        var deTotal = "/" + total.format("%02d");
+        if (_cargando) {
+            Ui.capsula(dc, cx, Ui.s(280), :giro, Ui.MORADO,
+                ["Actualizando", "  ·  ", numero, deTotal] as Array<String>,
+                [Ui.MORADO, Ui.GRIS_OSCURO, Ui.LIMA, Ui.GRIS] as Array<Number>,
+                [Ui.fTexto, Ui.fEtiqueta, Ui.fNumero, Ui.fNumero] as Array<FontType>,
+                0x15111F, 0x3A2D5C);
+        } else if (sinConexion) {
+            Ui.capsula(dc, cx, Ui.s(280), :sinRed, Ui.NARANJA,
+                ["Sin conexión · guardadas"] as Array<String>,
+                [Ui.NARANJA] as Array<Number>,
+                [Ui.fTexto] as Array<FontType>,
+                0x1E140A, 0x5A3A1A);
+        } else {
+            Ui.capsula(dc, cx, Ui.s(280), null, 0,
+                [Ui.fechaCorta(_fecha), "  ·  ", numero, deTotal] as Array<String>,
+                [Ui.GRIS_CLARO, Ui.GRIS_OSCURO, Ui.LIMA, Ui.GRIS] as Array<Number>,
+                [Ui.fEtiqueta, Ui.fEtiqueta, Ui.fNumero, Ui.fNumero] as Array<FontType>,
+                Ui.VIDRIO, Ui.VIDRIO_BORDE);
+        }
+
+        if (sinConexion) {
+            dibujarAyudaReintentar(dc, cx, Ui.s(318));
+        } else {
+            Ui.dibujarIcono(dc, :abajo, cx, Ui.s(322), Ui.GRIS_OSCURO);
+        }
+    }
+
+    // "↻ START · REINTENTAR"
+    private function dibujarAyudaReintentar(dc as Dc, cx as Number, y as Number) as Void {
+        var fuente = Ui.fEtiqueta;
+        var texto = "START · REINTENTAR";
+        var ancho = dc.getTextWidthInPixels(texto, fuente) + Ui.s(20);
+        var x = cx - ancho / 2;
+        Ui.dibujarIcono(dc, :refrescar, x + Ui.s(6), y, Ui.GRIS);
+        dc.setColor(Ui.GRIS, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(x + Ui.s(20), y, fuente, texto, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+    }
 
     // Elige la fuente más grande con la que el titular completo cabe en el área.
     private function ajustar(areaW as Number, areaH as Number) as Void {
