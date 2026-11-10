@@ -56,3 +56,18 @@ function demo(tema: Tema, fecha: string): ResumenDelDia {
     categorias: ['CONFIGURACIÓN', 'CÓMO FUNCIONA', 'CONTROLES'],
   };
 }
+
+/**
+ * Quita numeración, viñetas, markdown y citas y recorta a 15 palabras.
+ */
+function limpiar(linea: string): string {
+  const texto = linea
+    .replace(/^\s*(\d+[.)]|[-*•])\s*/, '')
+    .replace(/[*_`#]/g, '')
+    .replace(/\[\d+(,\s*\d+)*\]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const palabras = texto.split(' ').filter(Boolean);
+  if (palabras.length <= MAX_PALABRAS) return palabras.join(' ');
+  return palabras.slice(0, MAX_PALABRAS).join(' ').replace(/[,;:.]$/, '') + '...';
+}
