@@ -108,4 +108,28 @@ class NewsView extends WatchUi.View {
         WatchUi.requestUpdate();
     }
 
+    function recibir(datos as Dictionary) as Void {
+        var temaNuevo = datos.get("tema") as String;
+        var fechaNueva = datos.get("fecha") as String;
+        var habiaNoticias = _noticias.size() > 0;
+
+        // Resumen distinto (otro día u otro tema): se empieza desde la portada.
+        if (!habiaNoticias || !temaNuevo.equals(_tema) || !fechaNueva.equals(_fecha)) {
+            _indice = 0;
+            _leidas = 0;
+            _pantalla = PANTALLA_PORTADA;
+        }
+        _noticias = datos.get("noticias") as Array<String>;
+        var categorias = datos.get("categorias");
+        _categorias = (categorias instanceof Array) ? categorias as Array<String> : [] as Array<String>;
+        _fecha = fechaNueva;
+        _tema = temaNuevo;
+        _codigoError = null;
+        _ajusteIndice = -1;
+        if (_indice >= _noticias.size()) {
+            _indice = 0;
+        }
+        WatchUi.requestUpdate();
+    }
+
 }
