@@ -38,3 +38,7 @@ export function fechaHoy(): string {
   // en-CA produce el formato YYYY-MM-DD
   return new Intl.DateTimeFormat('en-CA', { timeZone: ZONA_HORARIA }).format(new Date());
 }
+
+export function esTema(valor: string | null | undefined): valor is Tema {
+  return !!valor && Object.prototype.hasOwnProperty.call(TEMAS, valor);
+}
