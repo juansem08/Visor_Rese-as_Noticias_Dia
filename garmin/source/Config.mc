@@ -56,7 +56,7 @@ module Config {
 
     function minutoAviso() as Number {
         return leerNumero("MinutoAviso", 0, 0, 59);
-        }
+    }
 
     // ---------- Aviso diario ----------
 
@@ -115,5 +115,18 @@ module Config {
             "tema" => (tema instanceof String) ? tema : temaActual()
         };
     }
-}
 
+    // Hasta 3 textos de una lista JSON (ignora lo que no sea texto).
+    function textosDe(lista) as Array<String> {
+        var textos = [] as Array<String>;
+        if (lista instanceof Array) {
+            for (var i = 0; i < lista.size() && textos.size() < 3; i++) {
+                var t = lista[i];
+                if (t instanceof String) {
+                    textos.add(t);
+                }
+            }
+        }
+        return textos;
+    }
+}
