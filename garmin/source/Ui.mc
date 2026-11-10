@@ -36,4 +36,9 @@ module Ui {
     const START_DESDE = 22;         // arco que señala el botón START
     const START_HASTA = 38;
 
+    var escala as Float = 1.0;
+
+    function s(v as Numeric) as Number {
+        return (v * escala).toNumber();
+    }
 }
