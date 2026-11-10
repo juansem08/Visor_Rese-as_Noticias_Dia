@@ -88,4 +88,14 @@ module Ui {
         dc.fillCircle(a[0], a[1], ancho / 2);
         dc.fillCircle(b[0], b[1], ancho / 2);
     }
+    // Anillo de progreso: 3 arcos de 116° desde arriba en sentido horario.
+    // "llenos" arcos van en "color"; el resto en el color de pista.
+    function anillo(dc as Dc, cx as Number, cy as Number, llenos as Number, color as Number) as Void {
+        var r = s(RADIO_ANILLO);
+        var ancho = s(GROSOR_ANILLO);
+        for (var k = 0; k < 3; k++) {
+            var desde = 90 - 120 * k - 2;
+            arco(dc, cx, cy, r, ancho, (k < llenos) ? color : PISTA, desde, desde - ARCO_SEGMENTO);
+        }
+    }
 }
