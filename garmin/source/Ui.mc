@@ -29,4 +29,11 @@ module Ui {
     const BRILLO_LIMA = 0x223200;
     const BRILLO_NARANJA = 0x3A2208;
 
+    // ---------- Medidas de la guía ----------
+    const RADIO_ANILLO = 184;
+    const GROSOR_ANILLO = 8;
+    const ARCO_SEGMENTO = 116;      // 3 arcos de 116° (+ 4° de separación)
+    const START_DESDE = 22;         // arco que señala el botón START
+    const START_HASTA = 38;
+
 }
