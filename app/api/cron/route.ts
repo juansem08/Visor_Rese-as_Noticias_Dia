@@ -1,6 +1,14 @@
 import { TEMAS, obtenerResumen, type Tema } from '@/lib/news';
 
+// Llamado cada mañana (ver vercel.json) para pedir a la IA el resumen de cada tema.
+// Si CRON_SECRET está definido, exige "Authorization: Bearer <CRON_SECRET>"
+// (Vercel Cron lo envía automáticamente).
 export async function GET(request: Request) {
+  const secreto = process.env.CRON_SECRET;
+  if (secreto && request.headers.get('authorization') !== `Bearer ${secreto}`) {
+    return new Response('No autorizado', { status: 401 });
+  }
+
   const resultado: { tema: Tema; ok: boolean }[] = [];
   for (const tema of Object.keys(TEMAS) as Tema[]) {
     try {
