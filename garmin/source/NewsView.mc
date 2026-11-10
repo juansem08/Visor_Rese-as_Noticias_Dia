@@ -409,4 +409,42 @@ class NewsView extends WatchUi.View {
         _ajusteIndice = _indice;
     }
 
+    // ---------- Fin: ESTÁS AL DÍA ----------
+
+    private function dibujarFin(dc as Dc, cx as Number, cy as Number) as Void {
+        Ui.brillo(dc, cx, Ui.s(110), Ui.s(150), Ui.BRILLO_LIMA);
+
+        // Anillo punteado interior
+        dc.setColor(0x2A2350, Graphics.COLOR_TRANSPARENT);
+        for (var a = 0; a < 360; a += 6) {
+            var p = Ui.punto(cx, cy, Ui.s(166), a);
+            dc.fillCircle(p[0], p[1], 1);
+        }
+        Ui.anillo(dc, cx, cy, 3, Ui.LIMA);
+
+        // Check
+        dc.setColor(Ui.LIMA, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(cx, Ui.s(95), Ui.s(37));
+        Ui.dibujarIcono(dc, :check, cx, Ui.s(95), Ui.NEGRO);
+
+        Ui.titulo(dc, cx, Ui.s(180), "ESTÁS AL DÍA", Ui.BLANCO);
+
+        var leidas = 0;
+        for (var i = 0; i < _noticias.size(); i++) {
+            if ((_leidas & (1 << i)) != 0) {
+                leidas += 1;
+            }
+        }
+        Ui.textoCentrado(dc, cx, Ui.s(218), Ui.fTexto,
+            leidas + " de " + _noticias.size() + " noticias leídas", Ui.GRIS);
+
+        var proximo = "Aviso diario desactivado";
+        if (Config.avisoActivo()) {
+            proximo = "Próximo resumen · " + Ui.horaTexto(Config.horaAviso(), Config.minutoAviso());
+        }
+        Ui.capsulaSimple(dc, cx, Ui.s(262), :reloj, Ui.GRIS_CLARO, proximo, Ui.BLANCO, Ui.fTexto);
+
+        Ui.textoCentrado(dc, cx, Ui.s(304), Ui.fEtiqueta, "BACK PARA SALIR", Ui.GRIS_OSCURO);
+    }
+
 }
