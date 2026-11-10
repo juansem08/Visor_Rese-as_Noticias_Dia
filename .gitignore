@@ -29,6 +29,7 @@ yarn-error.log*
 /garmin/bin/
 *.prg
 *.iq
+developer_key*
 
 # typescript
 *.tsbuildinfo
