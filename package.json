@@ -4,11 +4,9 @@
     "description": "Backend del visor de noticias del día para Garmin Forerunner 165",
     "private": true,
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "next dev",
         "build": "next build",
-        "start": "next start",
-        "lint": "next lint"
+        "start": "next start"
     },
     "repository": {
         "type": "git",
