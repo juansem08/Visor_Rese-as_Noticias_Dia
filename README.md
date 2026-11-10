@@ -76,3 +76,16 @@ para "actualizando", naranja `0xFF9F43` para "sin conexión", anillo de 3 arcos 
 (radio 184, grosor 8) que se llena un tercio por noticia y arco START en 22°–38°.
 Todo está en `garmin/source/Ui.mc`.
 
+### Tipografía
+La app incluye sus propias fuentes en `garmin/resources/fonts/` (formato BMFont):
+**Barlow Condensed Bold** para títulos y números, e **Inter** para titulares, etiquetas y textos
+(ambas con licencia SIL OFL, de Google Fonts). Para regenerarlas (por ejemplo, otro tamaño):
+
+```bash
+pip install pillow
+# descarga BarlowCondensed-Bold.ttf e Inter[opsz,wght].ttf (renombrado a Inter.ttf) en una carpeta
+python garmin/tools/genfonts.py <carpeta_ttf> garmin/resources/fonts
+```
+
+Las últimas noticias se guardan en el reloj, así que se ven aunque el teléfono no
+esté conectado.
