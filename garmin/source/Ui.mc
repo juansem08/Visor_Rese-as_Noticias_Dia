@@ -143,4 +143,46 @@ module Ui {
         dc.fillRoundedRectangle(cx - ancho / 2, cy - alto / 2, ancho, alto, alto / 2);
         textoCentrado(dc, cx, cy, fuente, texto, NEGRO);
     }
+    // Cápsula de vidrio con icono opcional y texto en varios colores y fuentes.
+    function capsula(dc as Dc, cx as Number, cy as Number, icono as Symbol?, colorIcono as Number,
+                     textos as Array<String>, colores as Array<Number>, fuentes as Array<FontType>,
+                     fondo as Number, borde as Number) as Void {
+        var anchoTexto = 0;
+        var altoFuente = 0;
+        for (var i = 0; i < textos.size(); i++) {
+            anchoTexto += dc.getTextWidthInPixels(textos[i], fuentes[i]);
+            var h = dc.getFontHeight(fuentes[i]);
+            if (h > altoFuente) {
+                altoFuente = h;
+            }
+        }
+        var anchoIcono = (icono != null) ? s(22) : 0;
+        var contenido = anchoTexto + anchoIcono;
+        var alto = altoFuente + s(14);
+        var ancho = contenido + s(36);
+
+        dc.setColor(fondo, Graphics.COLOR_TRANSPARENT);
+        dc.fillRoundedRectangle(cx - ancho / 2, cy - alto / 2, ancho, alto, alto / 2);
+        dc.setColor(borde, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(s(2));
+        dc.drawRoundedRectangle(cx - ancho / 2, cy - alto / 2, ancho, alto, alto / 2);
+        dc.setPenWidth(1);
+
+        var x = cx - contenido / 2;
+        if (icono != null) {
+            dibujarIcono(dc, icono, x + s(7), cy, colorIcono);
+            x += anchoIcono;
+        }
+        for (var i = 0; i < textos.size(); i++) {
+            dc.setColor(colores[i], Graphics.COLOR_TRANSPARENT);
+            dc.drawText(x, cy, fuentes[i], textos[i], Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            x += dc.getTextWidthInPixels(textos[i], fuentes[i]);
+        }
+    }
+
+    function capsulaSimple(dc as Dc, cx as Number, cy as Number, icono as Symbol?, colorIcono as Number,
+                           texto as String, colorTexto as Number, fuente as FontType) as Void {
+        capsula(dc, cx, cy, icono, colorIcono, [texto] as Array<String>, [colorTexto] as Array<Number>,
+            [fuente] as Array<FontType>, VIDRIO, VIDRIO_BORDE);
+    }
 }
