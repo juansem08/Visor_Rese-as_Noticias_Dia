@@ -1,0 +1,17 @@
+<!--
+  Fuentes de la guía de estilo, convertidas a BMFont (.fnt + .png):
+    Barlow Condensed Bold -> títulos, números y número gigante de fondo
+    Inter Bold / SemiBold -> titulares, etiquetas y textos
+  Ambas con licencia SIL Open Font License (Google Fonts).
+-->
+<fonts>
+    <font id="Titulo" filename="titulo.fnt" antialias="true"/>
+    <font id="TituloS" filename="titulo_s.fnt" antialias="true"/>
+    <font id="Numero" filename="numero.fnt" antialias="true"/>
+    <font id="Fondo" filename="fondo.fnt" antialias="true"/>
+    <font id="Titular" filename="titular.fnt" antialias="true"/>
+    <font id="TitularM" filename="titular_m.fnt" antialias="true"/>
+    <font id="TitularS" filename="titular_s.fnt" antialias="true"/>
+    <font id="Etiqueta" filename="etiqueta.fnt" antialias="true"/>
+    <font id="Texto" filename="texto.fnt" antialias="true"/>
+</fonts>
