@@ -90,3 +90,17 @@ function limpiarCategoria(valor: string): string {
     .slice(0, 16)
     .trim();
 }
+
+/** Sección de Google Noticias de cada tema. */
+const SECCIONES_RSS: Record<Tema, string> = {
+  mundo: 'WORLD',
+  tecnologia: 'TECHNOLOGY',
+  deportes: 'SPORTS',
+  economia: 'BUSINESS',
+  ciencia: 'SCIENCE',
+  salud: 'HEALTH',
+  cultura: 'ENTERTAINMENT',
+};
+
+// Edición de Google Noticias (país). Español latinoamericano; Colombia por defecto.
+const PAIS_RSS = process.env.NEWS_COUNTRY ?? 'CO';
