@@ -41,4 +41,18 @@ module Ui {
     function s(v as Numeric) as Number {
         return (v * escala).toNumber();
     }
+    // ---------- Color ----------
+
+    function mezclar(a as Number, b as Number, t as Float) as Number {
+        var r = canal(a, b, 16, t);
+        var g = canal(a, b, 8, t);
+        var bl = canal(a, b, 0, t);
+        return (r << 16) | (g << 8) | bl;
+    }
+
+    function canal(a as Number, b as Number, desplazamiento as Number, t as Float) as Number {
+        var ca = (a >> desplazamiento) & 0xFF;
+        var cb = (b >> desplazamiento) & 0xFF;
+        return ca + ((cb - ca) * t).toNumber();
+    }
 }
