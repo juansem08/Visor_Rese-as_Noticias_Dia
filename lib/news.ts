@@ -29,3 +29,7 @@ export type ResumenDelDia = {
   categorias: [string, string, string]; // etiqueta corta de cada noticia (p. ej. "ECONOMÍA")
   origen: 'ia' | 'demo';
 };
+
+const MAX_PALABRAS = 15;
+const ZONA_HORARIA = process.env.NEWS_TIMEZONE ?? 'America/Bogota';
+const MODELO = process.env.GEMINI_MODEL ?? 'gemini-3.8-flash';
