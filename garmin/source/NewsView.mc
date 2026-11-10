@@ -208,4 +208,90 @@ class NewsView extends WatchUi.View {
         WatchUi.requestUpdate();
     }
 
+    // ======================================================================
+    // Animación
+    // ======================================================================
+
+    private function preparandoVisible() as Boolean {
+        return _noticias.size() == 0 && (_cargando || _codigoError == null);
+    }
+
+    private function animar() as Void {
+        if (!_timerActivo && (_offset != 0 || preparandoVisible())) {
+            _timer.start(method(:onTick), 50, true);
+            _timerActivo = true;
+        }
+    }
+
+    function onTick() as Void {
+        _fase += 1;
+        if (_offset != 0) {
+            _offset = _offset / 2;
+            if (_offset > -2 && _offset < 2) {
+                _offset = 0;
+            }
+        }
+        if (_offset == 0 && !preparandoVisible()) {
+            _timer.stop();
+            _timerActivo = false;
+        }
+        WatchUi.requestUpdate();
+    }
+
+    // ======================================================================
+    // Dibujo
+    // ======================================================================
+
+    function onUpdate(dc as Dc) as Void {
+        var w = dc.getWidth();
+        var h = dc.getHeight();
+        Ui.escala = w / 390.0;
+        var cx = w / 2;
+        var cy = h / 2;
+
+        if (dc has :setAntiAlias) {
+            dc.setAntiAlias(true);
+        }
+        dc.setColor(Ui.NEGRO, Ui.NEGRO);
+        dc.clear();
+
+        if (_noticias.size() == 0) {
+            if (preparandoVisible()) {
+                dibujarPreparando(dc, cx, cy);
+            } else {
+                dibujarSinConexion(dc, cx, cy);
+            }
+        } else if (_pantalla == PANTALLA_PORTADA) {
+            dibujarPortada(dc, cx, cy);
+        } else if (_pantalla == PANTALLA_NOTICIA) {
+            dibujarNoticia(dc, w, cx, cy);
+        } else {
+            dibujarFin(dc, cx, cy);
+        }
+    }
+
+
+    // Elige la fuente más grande con la que el titular completo cabe en el área.
+    private function ajustar(areaW as Number, areaH as Number) as Void {
+        if (_ajusteIndice == _indice) {
+            return;
+        }
+        var texto = _noticias[_indice];
+        var fuentes = [Ui.fTitular, Ui.fTitularM, Ui.fTitularS] as Array<FontType>;
+        for (var i = 0; i < fuentes.size(); i++) {
+            var ajustado = Graphics.fitTextToArea(texto, fuentes[i], areaW, areaH, false);
+            if (ajustado != null) {
+                _ajusteTexto = ajustado;
+                _ajusteFuente = fuentes[i];
+                _ajusteIndice = _indice;
+                return;
+            }
+        }
+        // Último recurso: fuente mínima, recortando si hiciera falta.
+        var recortado = Graphics.fitTextToArea(texto, Ui.fTexto, areaW, areaH, true);
+        _ajusteTexto = (recortado != null) ? recortado : texto;
+        _ajusteFuente = Ui.fTexto;
+        _ajusteIndice = _indice;
+    }
+
 }
