@@ -447,4 +447,42 @@ class NewsView extends WatchUi.View {
         Ui.textoCentrado(dc, cx, Ui.s(304), Ui.fEtiqueta, "BACK PARA SALIR", Ui.GRIS_OSCURO);
     }
 
+    // ---------- Cargando: PREPARANDO TU RESUMEN ----------
+
+    private function dibujarPreparando(dc as Dc, cx as Number, cy as Number) as Void {
+        Ui.brillo(dc, cx, cy, Ui.s(170), 0x1A1238);
+
+        var r = Ui.s(Ui.RADIO_ANILLO);
+        var r2 = r - Ui.s(20);
+
+        // Pistas
+        dc.setPenWidth(Ui.s(Ui.GROSOR_ANILLO));
+        dc.setColor(Ui.PISTA, Graphics.COLOR_TRANSPARENT);
+        dc.drawCircle(cx, cy, r);
+        dc.setPenWidth(Ui.s(6));
+        dc.setColor(0x141414, Graphics.COLOR_TRANSPARENT);
+        dc.drawCircle(cx, cy, r2);
+        dc.setPenWidth(1);
+
+        // Arcos girando en sentidos opuestos
+        var giro = _fase * 6;
+        Ui.arco(dc, cx, cy, r, Ui.s(Ui.GROSOR_ANILLO), Ui.LIMA, 200 - giro, 90 - giro);
+        Ui.arco(dc, cx, cy, r2, Ui.s(6), Ui.MORADO, 320 + giro, 250 + giro);
+        Ui.arco(dc, cx, cy, r2, Ui.s(6), Ui.GRIS_OSCURO, 230 + giro, 195 + giro);
+
+        Ui.textoCentrado(dc, cx, Ui.s(110), Ui.fEtiqueta, Ui.fechaCorta(Ui.hoyIso()), Ui.GRIS);
+        Ui.titulo(dc, cx, Ui.s(154), "PREPARANDO", Ui.BLANCO);
+        Ui.titulo(dc, cx, Ui.s(206), "TU RESUMEN", Ui.LIMA);
+
+        // Tres puntos: el activo avanza
+        var activo = (_fase / 6) % 3;
+        for (var i = 0; i < 3; i++) {
+            dc.setColor((i == activo) ? Ui.LIMA : 0x3A3A3A, Graphics.COLOR_TRANSPARENT);
+            dc.fillCircle(cx + (i - 1) * Ui.s(17), Ui.s(244), Ui.s(4));
+        }
+
+        Ui.textoCentrado(dc, cx, Ui.s(284), Ui.fTexto,
+            "Pidiendo las noticias\na tu teléfono", Ui.GRIS_CLARO);
+    }
+
 }
