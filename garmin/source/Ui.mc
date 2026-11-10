@@ -110,4 +110,26 @@ module Ui {
     function marcaStart(dc as Dc, cx as Number, cy as Number) as Void {
         arco(dc, cx, cy, s(RADIO_ANILLO), s(GROSOR_ANILLO), LIMA, START_HASTA, START_DESDE);
     }
+    // ---------- Texto ----------
+
+    // La fuente más grande de la lista con la que "texto" cabe en "maxAncho".
+    function fuenteQueQuepa(dc as Dc, texto as String, maxAncho as Number, fuentes as Array<FontType>) as FontType {
+        for (var i = 0; i < fuentes.size() - 1; i++) {
+            if (dc.getTextWidthInPixels(texto, fuentes[i]) <= maxAncho) {
+                return fuentes[i];
+            }
+        }
+        return fuentes[fuentes.size() - 1];
+    }
+
+    function titulo(dc as Dc, cx as Number, y as Number, texto as String, color as Number) as Void {
+        var fuente = fuenteQueQuepa(dc, texto, s(310), [fTitulo, fTituloS] as Array<FontType>);
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, y, fuente, texto, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+    }
+
+    function textoCentrado(dc as Dc, cx as Number, y as Number, fuente as FontType, texto as String, color as Number) as Void {
+        dc.setColor(color, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, y, fuente, texto, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+    }
 }
