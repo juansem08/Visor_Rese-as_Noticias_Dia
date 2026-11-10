@@ -106,4 +106,8 @@ module Ui {
         dc.setColor(NEGRO, Graphics.COLOR_TRANSPARENT);
         dc.fillCircle(p[0], p[1], s(5));
     }
+    // Arco corto junto al botón START (22°–38°).
+    function marcaStart(dc as Dc, cx as Number, cy as Number) as Void {
+        arco(dc, cx, cy, s(RADIO_ANILLO), s(GROSOR_ANILLO), LIMA, START_HASTA, START_DESDE);
+    }
 }
