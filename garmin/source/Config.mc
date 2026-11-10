@@ -49,4 +49,13 @@ module Config {
         }
         return true;
     }
+
+    function horaAviso() as Number {
+        return leerNumero("HoraAviso", 7, 0, 23);
+    }
+
+    function minutoAviso() as Number {
+        return leerNumero("MinutoAviso", 0, 0, 59);
+    }
 }
+
