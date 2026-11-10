@@ -16,12 +16,10 @@
 
     <!-- Aviso -->
     <string id="GrupoAviso">Aviso diario</string>
-    <string id="DescAviso">El reloj vibra a la hora elegida con tus noticias listas para leer.</string>
+    <string id="DescAviso">El reloj vibra a la hora elegida con tus noticias listas para leer. La hora solo se usa si el aviso está activado.</string>
     <string id="TituloAviso">Activar aviso en el reloj</string>
-    <string id="GrupoHora">Hora del aviso</string>
-    <string id="DescHora">Elige a qué hora quieres recibir tu resumen.</string>
-    <string id="TituloHora">Hora</string>
-    <string id="TituloMinuto">Minutos</string>
+    <string id="TituloHora">Hora del aviso</string>
+    <string id="TituloMinuto">Minutos del aviso</string>
     <string id="H0">12 a. m. (medianoche)</string>
     <string id="H1">1 a. m.</string>
     <string id="H2">2 a. m.</string>
