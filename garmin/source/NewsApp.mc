@@ -44,6 +44,14 @@ class NewsApp extends Application.AppBase {
             }
         }
     }
+
+    // El usuario cambió algo en Garmin Connect (tema, aviso u hora).
+    function onSettingsChanged() as Void {
+        Config.programarAviso();
+        var view = _view;
+        if (view != null) {
+            view.actualizar(true);
+        }
+        WatchUi.requestUpdate();
+    }
 }
-
-
