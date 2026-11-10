@@ -170,6 +170,33 @@ class NewsView extends WatchUi.View {
         }
     }
 
+    // START: leer en la portada, actualizar en la noticia, volver a empezar en "Estás al día",
+    // reintentar si no hay noticias.
+    function start() as Void {
+        if (_noticias.size() == 0) {
+            actualizar(false);
+        } else if (_pantalla == PANTALLA_PORTADA) {
+            abrirNoticia(_indice, 1);
+        } else if (_pantalla == PANTALLA_NOTICIA) {
+            actualizar(false);
+        } else {
+            _indice = 0;
+            _pantalla = PANTALLA_PORTADA;
+            WatchUi.requestUpdate();
+        }
+    }
+
+    // Toque en pantalla: pulsa el botón visible (LEER RESUMEN / REINTENTAR)
+    // y, leyendo, pasa a la siguiente noticia.
+    function tocar() as Void {
+        if (_noticias.size() == 0) {
+            if (!_cargando) {
+                actualizar(false);
+            }
+        } else if (_pantalla != PANTALLA_FIN) {
+            siguiente();
+        }
+    }
 
     private function abrirNoticia(indice as Number, direccion as Number) as Void {
         _indice = indice;
