@@ -185,4 +185,21 @@ module Ui {
         capsula(dc, cx, cy, icono, colorIcono, [texto] as Array<String>, [colorTexto] as Array<Number>,
             [fuente] as Array<FontType>, VIDRIO, VIDRIO_BORDE);
     }
+    // Botón de acción START: píldora lima, texto negro y círculo negro con icono lima.
+    function botonAccion(dc as Dc, cx as Number, cy as Number, texto as String, icono as Symbol) as Void {
+        var fuente = fEtiqueta;
+        var alto = s(46);
+        var radioCirculo = s(16);
+        var anchoTexto = dc.getTextWidthInPixels(texto, fuente);
+        var ancho = s(20) + anchoTexto + s(12) + radioCirculo * 2 + s(7);
+        var x = cx - ancho / 2;
+
+        dc.setColor(LIMA, Graphics.COLOR_TRANSPARENT);
+        dc.fillRoundedRectangle(x, cy - alto / 2, ancho, alto, alto / 2);
+        dc.setColor(NEGRO, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(x + s(20), cy, fuente, texto, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+        var circuloX = x + ancho - s(7) - radioCirculo;
+        dc.fillCircle(circuloX, cy, radioCirculo);
+        dibujarIcono(dc, icono, circuloX, cy, LIMA);
+    }
 }
