@@ -29,4 +29,9 @@ class NewsApp extends Application.AppBase {
         view.actualizar(false);
         return [view, new NewsDelegate(view)];
     }
+
+    function getServiceDelegate() as [System.ServiceDelegate] {
+        return [new NewsService()];
+    }
 }
+
