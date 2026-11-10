@@ -10,3 +10,14 @@ export const TEMAS = {
 } as const;
 
 export type Tema = keyof typeof TEMAS;
+
+/** Etiqueta por defecto de cada tema (si la IA no da una categoría). */
+const ETIQUETAS: Record<Tema, string> = {
+  mundo: 'MUNDO',
+  tecnologia: 'TECNOLOGÍA',
+  deportes: 'DEPORTES',
+  economia: 'ECONOMÍA',
+  ciencia: 'CIENCIA',
+  salud: 'SALUD',
+  cultura: 'CULTURA',
+};
