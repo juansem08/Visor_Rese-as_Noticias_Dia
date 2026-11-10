@@ -40,6 +40,22 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ t
       <ol style={{ lineHeight: 1.5, paddingLeft: 20 }}>
         {noticias.map((n, i) => (
           <li key={i} style={{ marginBottom: 16 }}>
+            <span
+              style={{
+                display: 'inline-block',
+                background: LIMA,
+                color: '#000',
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: 1,
+                padding: '2px 10px',
+                borderRadius: 999,
+                marginBottom: 4,
+              }}
+            >
+              {categorias[i]}
+            </span>
+            <br />
             {n}
           </li>
         ))}
