@@ -15,5 +15,17 @@
     <setting propertyKey="@Properties.AvisoActivo" title="@Strings.TituloAviso">
         <settingConfig type="boolean"/>
     </setting>
-</settings>
 
+    <setting propertyKey="@Properties.HoraAviso" title="@Strings.TituloHora" prompt="@Strings.PromptHora">
+        <settingConfig type="numeric" min="0" max="23"/>
+    </setting>
+
+    <setting propertyKey="@Properties.MinutoAviso" title="@Strings.TituloMinuto">
+        <settingConfig type="list">
+            <listEntry value="0">@Strings.Min00</listEntry>
+            <listEntry value="15">@Strings.Min15</listEntry>
+            <listEntry value="30">@Strings.Min30</listEntry>
+            <listEntry value="45">@Strings.Min45</listEntry>
+        </settingConfig>
+    </setting>
+</settings>
