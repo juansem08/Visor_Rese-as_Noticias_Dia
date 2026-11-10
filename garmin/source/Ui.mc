@@ -202,4 +202,14 @@ module Ui {
         dc.fillCircle(circuloX, cy, radioCirculo);
         dibujarIcono(dc, icono, circuloX, cy, LIMA);
     }
+    // Círculo de vidrio con un icono dentro (pantalla sin conexión).
+    function circuloVidrio(dc as Dc, x as Number, y as Number, radio as Number, icono as Symbol) as Void {
+        dc.setColor(VIDRIO, Graphics.COLOR_TRANSPARENT);
+        dc.fillCircle(x, y, radio);
+        dc.setColor(VIDRIO_BORDE, Graphics.COLOR_TRANSPARENT);
+        dc.setPenWidth(s(2));
+        dc.drawCircle(x, y, radio);
+        dc.setPenWidth(1);
+        dibujarIcono(dc, icono, x, y, BLANCO);
+    }
 }
