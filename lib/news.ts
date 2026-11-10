@@ -176,21 +176,30 @@ async function generarResumen(tema: Tema, fecha: string): Promise<ResumenDelDia>
   ];
 
   try {
+    // 1) Titulares reales de hoy desde Google Noticias (gratis, sin clave).
+    // 2) Gemini solo elige y resume: no necesita la búsqueda de Google (que no tiene cuota gratuita).
+    // Si el RSS falla, se intenta con la búsqueda de Google integrada en Gemini.
     const titulares = await obtenerTitulares(tema).catch((err) => {
       console.warn(`No se pudo leer el RSS de "${tema}":`, err);
       return [] as string[];
     });
 
-    const prompt = [
-      `Hoy es ${fecha}. Estos son titulares reales de hoy sobre ${TEMAS[tema]}:`,
-      ...titulares.map((t) => `- ${t}`),
-      '',
-      'Elige las 3 noticias más importantes y distintas entre sí, priorizando las de alcance global.',
-      'Usa SOLO la información de los titulares; no inventes datos.',
-      ...formato,
-    ].join('\n');
+    const prompt =
+      titulares.length >= 3
+        ? [
+            `Hoy es ${fecha}. Estos son titulares reales de hoy sobre ${TEMAS[tema]}:`,
+            ...titulares.map((t) => `- ${t}`),
+            '',
+            'Elige las 3 noticias más importantes y distintas entre sí, priorizando las de alcance global.',
+            'Usa SOLO la información de los titulares; no inventes datos.',
+            ...formato,
+          ].join('\n')
+        : [
+            `Hoy es ${fecha}. Busca las 3 noticias más importantes a nivel global de las últimas 24 horas sobre: ${TEMAS[tema]}.`,
+            ...formato,
+          ].join('\n');
 
-    const res = await pedirAGemini(new GoogleGenAI({ apiKey }), prompt, false);
+    const res = await pedirAGemini(new GoogleGenAI({ apiKey }), prompt, titulares.length < 3);
     const lineas = (res.text ?? '').split('\n').filter(Boolean).slice(0, 3);
     return {
       fecha,
