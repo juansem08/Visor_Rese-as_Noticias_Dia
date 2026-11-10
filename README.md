@@ -34,3 +34,45 @@ En la app **Garmin Connect** → Dispositivo → Apps Connect IQ → *Noticias d
 > "¿Abrir Noticias del Dia?". El aviso queda programado después de abrir la app una vez;
 > si cambias la hora con la app cerrada, se aplica la próxima vez que la abras o tras el siguiente aviso.
 
+
+## 2. App del reloj (`garmin/`)
+
+Requisitos: [Connect IQ SDK](https://developer.garmin.com/connect-iq/sdk/) con el
+dispositivo **Forerunner 165** descargado en el SDK Manager, y la extensión
+*Monkey C* de VS Code.
+
+1. Edita `BACKEND_URL` en `garmin/source/Config.mc` con tu URL `https://…/api/news`.
+2. En VS Code: `Monkey C: Generate a Developer Key` (solo la primera vez).
+3. Abre la carpeta `garmin/` y ejecuta `Monkey C: Run App` → elige `fr165`.
+   - Ajustes en el simulador: *File → Edit Persistent Storage → Edit Application.Properties*.
+   - Aviso en el simulador: *Simulation → Background Events → Temporal Event*.
+   - Para probar con el backend local en el simulador usa
+     `http://localhost:3000/api/news` y desmarca
+     *Settings → Use Device HTTPS Requirements*.
+4. Para instalar en el reloj: `Monkey C: Build for Device` → `fr165` y copia el
+   `.prg` a `GARMIN/APPS/` del reloj conectado por USB.
+
+Desde la línea de comandos:
+
+```bash
+monkeyc -f garmin/monkey.jungle -d fr165 -o garmin/bin/NoticiasDelDia.prg -y developer_key.der
+```
+
+### Uso en el reloj
+
+Flujo: **Portada** ("Noticias del día") → **01/03** → **02/03** → **03/03** → **Estás al día**.
+Sin noticias guardadas se ve **Preparando tu resumen** o **Sin conexión**.
+
+| Gesto / botón | Acción |
+|---|---|
+| Deslizar arriba · botón DOWN | Siguiente (portada → noticias → "Estás al día") |
+| Deslizar abajo · botón UP | Anterior |
+| START | Leer (portada) · actualizar (noticia) · reintentar (sin conexión) · volver a empezar ("Estás al día") |
+| Toque | Pulsa el botón visible: LEER RESUMEN o REINTENTAR |
+| BACK | Salir |
+
+El estilo sigue la guía de diseño: negro puro, acento lima `0xC8FF2E`, morado `0xB794FF`
+para "actualizando", naranja `0xFF9F43` para "sin conexión", anillo de 3 arcos de 116°
+(radio 184, grosor 8) que se llena un tercio por noticia y arco START en 22°–38°.
+Todo está en `garmin/source/Ui.mc`.
+
