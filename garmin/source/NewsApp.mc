@@ -33,5 +33,17 @@ class NewsApp extends Application.AppBase {
     function getServiceDelegate() as [System.ServiceDelegate] {
         return [new NewsService()];
     }
+
+    // Noticias descargadas por el servicio en segundo plano.
+    function onBackgroundData(data as Application.PersistableType) as Void {
+        if (data instanceof Dictionary) {
+            NewsView.guardar(data);
+            var view = _view;
+            if (view != null) {
+                view.recibir(data);
+            }
+        }
+    }
 }
+
 
