@@ -58,13 +58,18 @@ function demo(tema: Tema, fecha: string): ResumenDelDia {
 }
 
 /**
- * Quita numeración, viñetas, markdown y citas y recorta a 15 palabras.
+ * Quita numeración, viñetas, markdown y citas, normaliza caracteres que las
+ * fuentes del reloj no tienen (comillas tipográficas, rayas, “…”) y recorta a 15 palabras.
  */
 function limpiar(linea: string): string {
   const texto = linea
     .replace(/^\s*(\d+[.)]|[-*•])\s*/, '')
     .replace(/[*_`#]/g, '')
     .replace(/\[\d+(,\s*\d+)*\]/g, '')
+    .replace(/[“”«»]/g, '"')
+    .replace(/[‘’]/g, "'")
+    .replace(/[–—]/g, '-')
+    .replace(/…/g, '...')
     .replace(/\s+/g, ' ')
     .trim();
   const palabras = texto.split(' ').filter(Boolean);
