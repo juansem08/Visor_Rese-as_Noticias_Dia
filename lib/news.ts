@@ -1,3 +1,5 @@
+import { GoogleGenAI } from '@google/genai';
+
 /** Temas disponibles. El orden debe coincidir con la lista de ajustes del reloj (garmin/resources). */
 export const TEMAS = {
   mundo: 'noticias globales generales (política internacional, sociedad, sucesos)',
@@ -132,4 +134,18 @@ function decodificar(texto: string): string {
     .replace(/&#39;|&apos;/g, "'")
     .replace(/&amp;/g, '&')
     .trim();
+}
+
+const LIMITE_MS = 25_000;
+
+async function pedirAGemini(ai: GoogleGenAI, prompt: string, conBusqueda: boolean) {
+  return await ai.models.generateContent({
+    model: MODELO,
+    contents: prompt,
+    config: {
+      temperature: 0.3,
+      abortSignal: AbortSignal.timeout(LIMITE_MS),
+      ...(conBusqueda ? { tools: [{ googleSearch: {} }] } : {}),
+    },
+  });
 }
