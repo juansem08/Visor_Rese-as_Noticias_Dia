@@ -18,6 +18,8 @@ class NewsService extends System.ServiceDelegate {
     }
 
     function onRespuesta(codigo as Number, data as Dictionary or String or Null) as Void {
+        // Vibra y muestra "¿Abrir Noticias del Dia?" en el reloj.
+        Background.requestApplicationWake("Tus 3 noticias del dia estan listas");
         // Entrega las noticias a la app (o null si falló; la app las pedirá al abrirse).
         Background.exit(Config.extraer(codigo, data));
     }
