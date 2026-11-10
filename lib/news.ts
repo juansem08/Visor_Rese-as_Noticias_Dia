@@ -45,6 +45,56 @@ export function esTema(valor: string | null | undefined): valor is Tema {
   return !!valor && Object.prototype.hasOwnProperty.call(TEMAS, valor);
 }
 
+/**
+ * "deportes,mundo,xyz" -> ['mundo', 'deportes'] (válidos, sin repetir y en el orden de TEMAS).
+ * Sin ninguno válido devuelve ['mundo'].
+ */
+export function normalizarTemas(valor: string | null | undefined): Tema[] {
+  const pedidos = new Set((valor ?? '').split(',').map((t) => t.trim().toLowerCase()));
+  const temas = (Object.keys(TEMAS) as Tema[]).filter((t) => pedidos.has(t));
+  return temas.length > 0 ? temas : ['mundo'];
+}
+
+/** Respuesta para el reloj: un tema o una mezcla ("mundo,deportes"). */
+export type RespuestaNoticias = Omit<ResumenDelDia, 'tema'> & { tema: string };
+
+/**
+ * Las 3 noticias repartidas entre varios temas. Se usan como máximo 3 temas por día
+ * (rotando cuáles según la fecha si el usuario eligió más), y cada tema reutiliza su
+ * resumen diario en caché, así que mezclar no gasta llamadas extra a Gemini.
+ */
+export async function obtenerResumenTemas(temas: Tema[]): Promise<RespuestaNoticias> {
+  const clave = temas.join(',');
+  if (temas.length === 1) return { ...(await obtenerResumen(temas[0])), tema: clave };
+
+  const hoy = fechaHoy();
+  const dia = Math.floor(Date.parse(hoy) / 86_400_000);
+  const inicio = dia % temas.length;
+  const elegidos = Array.from({ length: Math.min(3, temas.length) }, (_, i) => temas[(inicio + i) % temas.length]);
+
+  // De uno en uno para no superar el límite por minuto de Gemini si alguno no está en caché.
+  const resumenes: ResumenDelDia[] = [];
+  for (const t of elegidos) resumenes.push(await obtenerResumen(t));
+
+  // Reparto: tema A, tema B, tema C (o A, B, A si solo hay dos).
+  const noticias: string[] = [];
+  const categorias: string[] = [];
+  for (let i = 0; i < 3; i++) {
+    const r = resumenes[i % resumenes.length];
+    const n = Math.floor(i / resumenes.length);
+    noticias.push(r.noticias[n]);
+    categorias.push(r.categorias[n]);
+  }
+
+  return {
+    fecha: hoy,
+    tema: clave,
+    noticias: noticias as [string, string, string],
+    categorias: categorias as [string, string, string],
+    origen: resumenes.every((r) => r.origen === 'ia') ? 'ia' : 'demo',
+  };
+}
+
 export function fechaHoy(): string {
   // en-CA produce el formato YYYY-MM-DD
   return new Intl.DateTimeFormat('en-CA', { timeZone: ZONA_HORARIA }).format(new Date());
