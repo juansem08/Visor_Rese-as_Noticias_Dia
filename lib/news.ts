@@ -136,16 +136,27 @@ function decodificar(texto: string): string {
     .trim();
 }
 
+// Si el modelo principal está saturado (503), sin cuota (429) o tarda demasiado, se prueba el siguiente.
+const MODELOS = [...new Set([MODELO, 'gemini-3.5-flash', 'gemini-flash-lite-latest'])];
 const LIMITE_MS = 25_000;
 
 async function pedirAGemini(ai: GoogleGenAI, prompt: string, conBusqueda: boolean) {
-  return await ai.models.generateContent({
-    model: MODELO,
-    contents: prompt,
-    config: {
-      temperature: 0.3,
-      abortSignal: AbortSignal.timeout(LIMITE_MS),
-      ...(conBusqueda ? { tools: [{ googleSearch: {} }] } : {}),
-    },
-  });
+  let ultimoError: unknown;
+  for (const model of MODELOS) {
+    try {
+      return await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          temperature: 0.3,
+          abortSignal: AbortSignal.timeout(LIMITE_MS),
+          ...(conBusqueda ? { tools: [{ googleSearch: {} }] } : {}),
+        },
+      });
+    } catch (err) {
+      console.warn(`Gemini "${model}" falló, probando el siguiente modelo:`, (err as Error).message?.slice(0, 160));
+      ultimoError = err;
+    }
+  }
+  throw ultimoError;
 }
