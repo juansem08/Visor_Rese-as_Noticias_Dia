@@ -55,4 +55,13 @@ module Ui {
         var cb = (b >> desplazamiento) & 0xFF;
         return ca + ((cb - ca) * t).toNumber();
     }
+    // Brillo radial suave: círculos concéntricos de negro al color (sin transparencias).
+    function brillo(dc as Dc, x as Number, y as Number, radio as Number, color as Number) as Void {
+        var pasos = 28;
+        for (var i = 0; i < pasos; i++) {
+            var t = (i + 1).toFloat() / pasos;
+            dc.setColor(mezclar(NEGRO, color, t * t), Graphics.COLOR_TRANSPARENT);
+            dc.fillCircle(x, y, radio * (pasos - i) / pasos);
+        }
+    }
 }
