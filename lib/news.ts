@@ -104,3 +104,21 @@ const SECCIONES_RSS: Record<Tema, string> = {
 
 // Edición de Google Noticias (país). Español latinoamericano; Colombia por defecto.
 const PAIS_RSS = process.env.NEWS_COUNTRY ?? 'CO';
+
+/** Hasta 20 titulares de hoy de Google Noticias para el tema. */
+async function obtenerTitulares(tema: Tema): Promise<string[]> {
+  const url =
+    `https://news.google.com/rss/headlines/section/topic/${SECCIONES_RSS[tema]}` +
+    `?hl=es-419&gl=${PAIS_RSS}&ceid=${PAIS_RSS}:es-419`;
+  const res = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(10_000) });
+  if (!res.ok) throw new Error(`RSS ${res.status}`);
+  const xml = await res.text();
+
+  const titulares: string[] = [];
+  for (const item of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+    const titulo = item[1].match(/<title>([\s\S]*?)<\/title>/)?.[1];
+    if (titulo) titulares.push(titulo);
+    if (titulares.length >= 20) break;
+  }
+  return titulares;
+}
