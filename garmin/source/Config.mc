@@ -3,6 +3,7 @@ import Toybox.Background;
 import Toybox.Communications;
 import Toybox.Lang;
 import Toybox.Time;
+import Toybox.Time.Gregorian;
 
 // URL del backend. En el reloj real DEBE ser HTTPS (p. ej. desplegado en Vercel).
 // En el simulador puedes usar "http://localhost:3000/api/news" desactivando
@@ -62,7 +63,7 @@ module Config {
     }
 
     function avisoActivo() as Boolean {
-        return leerBooleano("AvisoActivo", true);
+        return leerBooleano("AvisoDiarioActivo", true);
     }
 
     // 0 = grande, 1 = mediano, 2 = pequeño
@@ -79,11 +80,11 @@ module Config {
     }
 
     function horaAviso() as Number {
-        return leerNumero("HoraAviso", 7, 0, 23);
+        return leerNumero("AvisoHora", 7, 0, 23);
     }
 
     function minutoAviso() as Number {
-        return leerNumero("MinutoAviso", 0, 0, 59);
+        return leerNumero("AvisoMinutos", 0, 0, 59);
     }
 
     // ---------- Aviso diario ----------
@@ -112,10 +113,18 @@ module Config {
 
     // ---------- Red ----------
 
+    // Fecha local del reloj, "YYYY-MM-DD".
+    function hoyIso() as String {
+        var info = Gregorian.info(Time.now(), Time.FORMAT_SHORT);
+        return info.year.format("%04d") + "-" + (info.month as Number).format("%02d") + "-" + info.day.format("%02d");
+    }
+
     function pedirNoticias(callback as Method) as Void {
         Communications.makeWebRequest(
             BACKEND_URL,
-            { "tema" => temaActual() },
+            // "dia" hace que cada día sea una URL distinta: la caché de Vercel
+            // nunca puede devolver el resumen de ayer a la hora del aviso.
+            { "tema" => temaActual(), "dia" => hoyIso() },
             {
                 :method => Communications.HTTP_REQUEST_METHOD_GET,
                 :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON

@@ -43,11 +43,11 @@ function pruebaNingunTemaUsaMundo(logger as Logger) as Boolean {
 }
 
 (:test)
-function pruebaAvisoActivoYDesactivado(logger as Logger) as Boolean {
-    Application.Properties.setValue("AvisoActivo", false);
+function pruebaAvisoDiarioActivoYDesactivado(logger as Logger) as Boolean {
+    Application.Properties.setValue("AvisoDiarioActivo", false);
     var apagado = !Config.avisoActivo();
     Config.programarAviso();   // con el aviso apagado no debe fallar
-    Application.Properties.setValue("AvisoActivo", true);
+    Application.Properties.setValue("AvisoDiarioActivo", true);
     var encendido = Config.avisoActivo();
     Config.programarAviso();   // con el aviso encendido tampoco
     return apagado && encendido;
@@ -55,13 +55,13 @@ function pruebaAvisoActivoYDesactivado(logger as Logger) as Boolean {
 
 (:test)
 function pruebaHoraYMinuto(logger as Logger) as Boolean {
-    Application.Properties.setValue("HoraAviso", 19);
-    Application.Properties.setValue("MinutoAviso", 45);
+    Application.Properties.setValue("AvisoHora", 19);
+    Application.Properties.setValue("AvisoMinutos", 45);
     var ok = Config.horaAviso() == 19 && Config.minutoAviso() == 45;
-    Application.Properties.setValue("HoraAviso", 30);     // inválida -> 7
+    Application.Properties.setValue("AvisoHora", 30);     // inválida -> 7
     ok = ok && Config.horaAviso() == 7;
-    Application.Properties.setValue("HoraAviso", 7);
-    Application.Properties.setValue("MinutoAviso", 0);
+    Application.Properties.setValue("AvisoHora", 7);
+    Application.Properties.setValue("AvisoMinutos", 0);
     return ok;
 }
 
@@ -72,6 +72,15 @@ function pruebaHoraEnFormato12h(logger as Logger) as Boolean {
         && Ui.horaTexto(7, 0).equals("7:00 a. m.")
         && Ui.horaTexto(12, 30).equals("12:30 p. m.")
         && Ui.horaTexto(19, 45).equals("7:45 p. m.");
+}
+
+(:test)
+function pruebaFechaDelDiaEnLaPeticion(logger as Logger) as Boolean {
+    var dia = Config.hoyIso();
+    logger.debug("dia = " + dia);
+    // "YYYY-MM-DD" y la misma fecha que muestra la interfaz
+    return dia.length() == 10 && dia.substring(4, 5).equals("-") && dia.substring(7, 8).equals("-")
+        && dia.equals(Ui.hoyIso());
 }
 
 (:test)

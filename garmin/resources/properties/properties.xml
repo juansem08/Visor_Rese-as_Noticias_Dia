@@ -9,9 +9,9 @@
     <property id="TemaCultura" type="boolean">false</property>
 
     <!-- Aviso diario -->
-    <property id="AvisoActivo" type="boolean">true</property>
-    <property id="HoraAviso" type="number">7</property>
-    <property id="MinutoAviso" type="number">0</property>
+    <property id="AvisoDiarioActivo" type="boolean">true</property>
+    <property id="AvisoHora" type="number">7</property>
+    <property id="AvisoMinutos" type="number">0</property>
 
     <!-- Lectura en el reloj -->
     <property id="TamanoTexto" type="number">0</property>

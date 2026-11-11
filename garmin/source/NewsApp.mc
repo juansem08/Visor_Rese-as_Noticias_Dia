@@ -37,6 +37,11 @@ class NewsApp extends Application.AppBase {
     // Noticias descargadas por el servicio en segundo plano.
     function onBackgroundData(data as Application.PersistableType) as Void {
         if (data instanceof Dictionary) {
+            // Si el usuario cambió de temas después de la descarga, esas noticias ya no sirven.
+            var tema = data.get("tema");
+            if (!(tema instanceof String) || !tema.equals(Config.temaActual())) {
+                return;
+            }
             NewsView.guardar(data);
             var view = _view;
             if (view != null) {

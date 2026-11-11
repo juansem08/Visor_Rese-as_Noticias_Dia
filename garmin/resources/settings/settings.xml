@@ -29,10 +29,10 @@
     <!-- 2. Aviso diario: interruptor, hora y minutos juntos y siempre visibles
          (enableIfTrue ocultaba la hora en Garmin Connect). -->
     <group id="GrupoAviso" title="@Strings.GrupoAviso" description="@Strings.DescAviso">
-        <setting propertyKey="@Properties.AvisoActivo" title="@Strings.TituloAviso">
+        <setting propertyKey="@Properties.AvisoDiarioActivo" title="@Strings.TituloAviso">
             <settingConfig type="boolean"/>
         </setting>
-        <setting propertyKey="@Properties.HoraAviso" title="@Strings.TituloHora">
+        <setting propertyKey="@Properties.AvisoHora" title="@Strings.TituloHora">
             <settingConfig type="list">
                 <listEntry value="0">@Strings.H0</listEntry>
                 <listEntry value="1">@Strings.H1</listEntry>
@@ -60,7 +60,7 @@
                 <listEntry value="23">@Strings.H23</listEntry>
             </settingConfig>
         </setting>
-        <setting propertyKey="@Properties.MinutoAviso" title="@Strings.TituloMinuto">
+        <setting propertyKey="@Properties.AvisoMinutos" title="@Strings.TituloMinuto">
             <settingConfig type="list">
                 <listEntry value="0">@Strings.Min00</listEntry>
                 <listEntry value="15">@Strings.Min15</listEntry>

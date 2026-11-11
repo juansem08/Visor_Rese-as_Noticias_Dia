@@ -66,6 +66,12 @@ class NewsView extends WatchUi.View {
             _tema = tema;
         }
 
+        // Si se cambiaron los temas en el teléfono, las noticias guardadas son de otros
+        // temas: no se muestran (se ve "Preparando" hasta que lleguen las nuevas).
+        if (!_tema.equals(Config.temaActual())) {
+            descartarNoticias();
+        }
+
         // Ajuste "Abrir directo en la primera noticia"
         if (Config.abrirDirecto() && _noticias.size() > 0) {
             _pantalla = PANTALLA_NOTICIA;
@@ -73,10 +79,28 @@ class NewsView extends WatchUi.View {
         }
     }
 
-    // Se llama cuando cambian los ajustes en el teléfono (tamaño del texto, etc.).
+    // Se llama cuando cambian los ajustes en el teléfono (temas, tamaño del texto, etc.).
     function aplicarAjustes() as Void {
         _ajusteIndice = -1;
+        if (!_tema.equals(Config.temaActual())) {
+            descartarNoticias();
+        }
         WatchUi.requestUpdate();
+    }
+
+    private function descartarNoticias() as Void {
+        _noticias = [] as Array<String>;
+        _categorias = [] as Array<String>;
+        _fecha = "";
+        _tema = Config.temaActual();
+        _indice = 0;
+        _leidas = 0;
+        _pantalla = PANTALLA_PORTADA;
+        _ajusteIndice = -1;
+        Storage.deleteValue(CLAVE_NOTICIAS);
+        Storage.deleteValue(CLAVE_CATEGORIAS);
+        Storage.deleteValue(CLAVE_FECHA);
+        Storage.deleteValue(CLAVE_TEMA);
     }
 
     function onShow() as Void {
