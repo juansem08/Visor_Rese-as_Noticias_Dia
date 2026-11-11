@@ -212,9 +212,15 @@ function limpiar(linea: string): string {
 const MODELOS = [...new Set([MODELO, 'gemini-3.5-flash', 'gemini-flash-lite-latest'])];
 const LIMITE_MS = 25_000;
 
+// Modelos que respondieron 429 (cuota agotada): se saltan durante 1 h para no perder
+// tiempo en cada petición (la cuota diaria gratuita se agota y tarda horas en volver).
+const SIN_CUOTA_MS = 60 * 60 * 1000;
+const sinCuotaHasta = new Map<string, number>();
+
 async function pedirAGemini(ai: GoogleGenAI, prompt: string, conBusqueda: boolean) {
   let ultimoError: unknown;
-  for (const model of MODELOS) {
+  const disponibles = MODELOS.filter((m) => (sinCuotaHasta.get(m) ?? 0) < Date.now());
+  for (const model of disponibles.length > 0 ? disponibles : MODELOS) {
     try {
       return await ai.models.generateContent({
         model,
@@ -226,7 +232,11 @@ async function pedirAGemini(ai: GoogleGenAI, prompt: string, conBusqueda: boolea
         },
       });
     } catch (err) {
-      console.warn(`Gemini "${model}" falló, probando el siguiente modelo:`, (err as Error).message?.slice(0, 160));
+      const mensaje = (err as Error).message ?? '';
+      if (mensaje.includes('"code":429') || mensaje.includes('RESOURCE_EXHAUSTED')) {
+        sinCuotaHasta.set(model, Date.now() + SIN_CUOTA_MS);
+      }
+      console.warn(`Gemini "${model}" falló, probando el siguiente modelo:`, mensaje.slice(0, 160));
       ultimoError = err;
     }
   }
